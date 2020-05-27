@@ -8,21 +8,22 @@
         <version>2.2.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>by.pub.app</groupId>
+    <groupId>by.pub</groupId>
     <artifactId>pub-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>pub-app</name>
-    <description>Small app for pub clients</description>
+    <description>Small app for pub management</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>14</java.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-rsocket</artifactId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -44,11 +45,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -59,5 +55,9 @@
             </plugin>
         </plugins>
     </build>
+
+    <modules>
+        <module>storage-app</module>
+    </modules>
 
 </project>
