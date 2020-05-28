@@ -7,11 +7,15 @@ import java.util.List;
 public interface IngredientService {
     List<Ingredient> findAllIngredients();
 
-    Ingredient orderIngredients(String name, Long amount);
+    Ingredient orderIngredient(String name, Long amount);
 
     Ingredient findIngredientByName(String name);
 
     Ingredient findIngredientById(String id);
 
     Ingredient saveIngredient(Ingredient ingredient);
+
+    void deleteIngredientByName(String name);
+    
+    Ingredient updateIngredientAmount(String ingredientName, Long amount);
 }
