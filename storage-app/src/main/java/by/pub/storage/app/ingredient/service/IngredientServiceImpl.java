@@ -2,7 +2,7 @@ package by.pub.storage.app.ingredient.service;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient.repository.IngredientRepository;
-import by.pub.storage.app.provider.IngredientProvider;
+import by.pub.storage.app.ingredient.provider.IngredientProvider;
 import org.mockito.Mockito;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +42,10 @@ public class IngredientServiceImpl implements IngredientService {
     public Ingredient findIngredientById(String id) {
         return ingredientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("There is no ingredient with id: " + id));
+    }
+
+    @Override
+    public Ingredient saveIngredient(Ingredient ingredient) {
+        return ingredientRepository.save(ingredient);
     }
 }

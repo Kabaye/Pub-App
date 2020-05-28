@@ -1,4 +1,4 @@
-package by.pub.storage.app.provider;
+package by.pub.storage.app.ingredient.provider;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
 

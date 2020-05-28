@@ -12,4 +12,6 @@ public interface IngredientService {
     Ingredient findIngredientByName(String name);
 
     Ingredient findIngredientById(String id);
+
+    Ingredient saveIngredient(Ingredient ingredient);
 }
