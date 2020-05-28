@@ -1,0 +1,8 @@
+server:
+  port: 9890
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://${USER}:${PASSWORD}@kabayedb-gw5zw.gcp.mongodb.net/test?retryWrites=true&w=majority
+      database: storage-app
