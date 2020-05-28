@@ -1,10 +1,10 @@
 package by.pub.storage.app.ingredient.service;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
-
 import java.util.List;
 
 public interface IngredientService {
+
     List<Ingredient> findAllIngredients();
 
     Ingredient orderIngredient(String name, Long amount);

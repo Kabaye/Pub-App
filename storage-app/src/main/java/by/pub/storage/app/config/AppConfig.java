@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
+
     @Bean
-    public IngredientProvider ingredientProvider(){
+    public IngredientProvider ingredientProvider() {
         return Mockito.mock(IngredientProvider.class);
     }
 }

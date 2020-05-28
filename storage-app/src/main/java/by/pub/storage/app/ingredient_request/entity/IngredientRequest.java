@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Accessors(chain = true)
 @Document(collection = "ingredient_requests")
 public class IngredientRequest {
+
     @Id
     private String id;
     @Indexed(unique = true)
