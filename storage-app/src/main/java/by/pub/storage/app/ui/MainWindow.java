@@ -2,75 +2,111 @@ package by.pub.storage.app.ui;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import org.springframework.stereotype.Component;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindow extends JFrame {
 
-    //TODO 28.05.2020 Никаких public констант!
+    private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
 
     private static final int SCREEN_WIDTH = 1000;
     private static final int SCREEN_HEIGHT = 600;
+    private final JPanel ingredientPanel;
+
     private final JPanel mainPanel;
     private final JPanel authPanel;
-    private final JPanel ingredientPanel;
     private final JPanel ingredientRequestPanel;
+    private final JLabel ingredientLabel;
+    private final JLabel ingredientRequestLabel;
+    private final JScrollPane ingredientScrollPane;
+    private final JScrollPane ingredientRequestScrollPane;
+    private final ListModel<Ingredient> ingredientListModel;
     private final JList<Ingredient> ingredientJList;
-    private final DefaultListModel<Ingredient> ingredientDefaultListModel;
     private final JList<IngredientRequest> ingredientRequestJList;
-    private final JButton fulfillButton;
-    private final JButton ingredientRequestButton;
-
-    //TODO 28.05.2020 Ниже
-
-    /**
-     * Жека вот тут все разнеси аккуратно.
-     * Лучше пускай будет вызов метода, но будет читабельно, чем вот такая каша
-     * Имею в виду, что лучше пускай будет так:
-     * <p>
-     * initializeComponents() <- тут все создаешь
-     * configureComponents() <- тут их конфигуришь
-     * <p>
-     * и т. д.
-     */
+    private final ListModel<IngredientRequest> ingredientRequestListModel;
 
     public MainWindow() {
         authPanel = new JPanel();
 
-        mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new GridLayout(1, 2));
 
         ingredientRequestPanel = new JPanel(new BorderLayout());
-        ingredientRequestJList = new JList<>();
+        ingredientRequestListModel = new DefaultListModel<>();
+        ingredientRequestJList = new JList<>(ingredientRequestListModel);
+        ingredientRequestScrollPane = new JScrollPane(ingredientRequestJList);
         fulfillButton = new JButton("Fulfill request");
-        ingredientRequestPanel.add(ingredientRequestJList, BorderLayout.NORTH);
-        ingredientRequestJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, 2 * SCREEN_HEIGHT / 3));
-        ingredientRequestPanel.add(fulfillButton, BorderLayout.SOUTH);
-        fulfillButton.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 6));
+        ingredientRequestLabel = new JLabel("Requests from bartender");
 
         ingredientPanel = new JPanel(new BorderLayout());
+        ingredientListModel = new DefaultListModel<>();
+        ingredientJList = new JList<>(ingredientListModel);
+        ingredientScrollPane = new JScrollPane(ingredientJList);
+        ingredientRequestButton = new JButton("Request ingredients");
+        ingredientLabel = new JLabel("Available ingredients");
 
-        ingredientDefaultListModel = new DefaultListModel<>();
-        ingredientJList = new JList<>(ingredientDefaultListModel);
-
-        ingredientRequestButton = new JButton("Request more");
-        ingredientPanel.add(ingredientJList, BorderLayout.NORTH);
-        ingredientJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, 2 * SCREEN_HEIGHT / 3));
-        ingredientPanel.add(ingredientRequestButton, BorderLayout.SOUTH);
-        ingredientRequestButton.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 6));
-
-        mainPanel.add(ingredientJList, BorderLayout.EAST);
-        mainPanel.add(ingredientRequestJList, BorderLayout.WEST);
-
+        addComponentsToIngredientPanel();
+        addComponentsToIngredientRequestPanel();
+        addComponentsToMainPanel();
+        configureComponents();
         setMainWindowPreferences();
+    }
+
+    private final JButton fulfillButton;
+    private final JButton ingredientRequestButton;
+
+    public static void main(String[] args) {
+        MainWindow window = new MainWindow();
+        window.setVisible(true);
+    }
+
+    private void addComponentsToIngredientPanel() {
+        ingredientPanel.add(ingredientLabel, BorderLayout.NORTH);
+        ingredientPanel.add(ingredientScrollPane, BorderLayout.CENTER);
+        ingredientPanel.add(ingredientRequestButton, BorderLayout.SOUTH);
+    }
+
+    private void addComponentsToIngredientRequestPanel() {
+        ingredientRequestPanel.add(ingredientRequestLabel, BorderLayout.NORTH);
+        ingredientRequestPanel.add(ingredientRequestScrollPane, BorderLayout.CENTER);
+        ingredientRequestPanel.add(fulfillButton, BorderLayout.SOUTH);
+    }
+
+    private void addComponentsToMainPanel() {
+        mainPanel.add(ingredientRequestPanel);
+        mainPanel.add(ingredientPanel);
+    }
+
+    private void configureComponents() {
+        //panels configuration
+        ingredientRequestPanel.setBorder(BorderFactory.createBevelBorder(1));
+        ingredientPanel.setBorder(BorderFactory.createBevelBorder(1));
+        //jLists configuration
+        ingredientRequestJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
+        ingredientJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
+        //labels configuration
+        ingredientLabel.setFont(HEADER_FONT);
+        ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        ingredientRequestLabel.setFont(HEADER_FONT);
+        ingredientRequestLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        //buttons configuration
+        fulfillButton.setFont(HEADER_FONT);
+        ingredientRequestButton.setFont(HEADER_FONT);
+
     }
 
     private void setMainWindowPreferences() {
