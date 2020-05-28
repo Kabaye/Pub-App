@@ -14,7 +14,8 @@ public class StorageEventPublisherImpl implements StorageEventPublisher {
 
     @Override
     public void publishEvent(ApplicationEvent applicationEvent) {
-        System.out.println("event published: " + applicationEvent);
+        System.out.println("event published: " + applicationEvent.getClass().getSimpleName());
+        System.out.println(Thread.currentThread().getName());
         publisher.publishEvent(applicationEvent);
     }
 }
