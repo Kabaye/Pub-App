@@ -1,10 +1,7 @@
 package by.pub.storage.app.ui;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
-import by.pub.storage.app.ingredient.event.IngredientChangedEvent;
-import by.pub.storage.app.ingredient.event.NewIngredientEvent;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.swing.DefaultListModel;
@@ -84,15 +81,15 @@ public class MainWindow extends JFrame {
         pack();
     }
 
-    @EventListener
-    public void handleIngrChanged(IngredientChangedEvent event) {
-        ingredientDefaultListModel.addElement(event.getChangedIngredient());
-        System.out.println("IngredientChangedEvent: " + event.getChangedIngredient());
-    }
-
-    @EventListener
-    public void handleNewIngr(NewIngredientEvent event) {
-        ingredientDefaultListModel.addElement(event.getNewIngredient());
-        System.out.println("NewIngredientEvent: " + event.getNewIngredient());
-    }
+//    @EventListener
+//    public void handleIngrChanged(IngredientChangedEvent event) {
+//        ingredientDefaultListModel.addElement(event.getChangedIngredient());
+//        System.out.println("IngredientChangedEvent: " + event.getChangedIngredient());
+//    }
+//
+//    @EventListener
+//    public void handleNewIngr(NewIngredientEvent event) {
+//        ingredientDefaultListModel.addElement(event.getNewIngredient());
+//        System.out.println("NewIngredientEvent: " + event.getNewIngredient());
+//    }
 }
