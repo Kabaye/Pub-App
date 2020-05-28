@@ -1,6 +1,7 @@
 package by.pub.storage.app.ingredient.service;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
+
 import java.util.List;
 
 public interface IngredientService {
@@ -16,6 +17,6 @@ public interface IngredientService {
     Ingredient saveIngredient(Ingredient ingredient);
 
     void deleteIngredientByName(String name);
-    
-    Ingredient updateIngredientAmount(String ingredientName, Long amount);
+
+    Ingredient takeIngredients(String ingredientName, Long amount);
 }

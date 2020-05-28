@@ -1,7 +1,10 @@
 package by.pub.storage.app.ingredient.service;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
+import by.pub.storage.app.ingredient.event.IngredientChangedEvent;
+import by.pub.storage.app.ingredient.event.NewIngredientEvent;
 import by.pub.storage.app.ingredient.provider.IngredientProvider;
+import by.pub.storage.app.ingredient.publisher.StorageEventPublisher;
 import by.pub.storage.app.ingredient.repository.IngredientRepository;
 import lombok.SneakyThrows;
 import org.mockito.Mockito;
@@ -14,19 +17,18 @@ import java.util.concurrent.TimeUnit;
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientProvider ingredientProvider;
+    private final StorageEventPublisher storageEventPublisher;
 
-    private static final Long REQUEST_AMOUNT = 100L;
-
-    public IngredientServiceImpl(IngredientRepository ingredientRepository, IngredientProvider ingredientProvider) {
+    public IngredientServiceImpl(IngredientRepository ingredientRepository, IngredientProvider ingredientProvider, StorageEventPublisher storageEventPublisher) {
         this.ingredientRepository = ingredientRepository;
         this.ingredientProvider = ingredientProvider;
+        this.storageEventPublisher = storageEventPublisher;
     }
 
     @Override
     public List<Ingredient> findAllIngredients() {
         return ingredientRepository.findAll();
     }
-
 
     @Override
     @SneakyThrows
@@ -35,11 +37,18 @@ public class IngredientServiceImpl implements IngredientService {
         Mockito.when(ingredientProvider.provideIngredient(name, amount))
                 .thenReturn(new Ingredient().setAmount(amount)
                         .setName(name));
+
+        Ingredient ingredientInDb = findIngredientByName(name);
+
         // Imitation of work
         TimeUnit.MILLISECONDS.sleep(100);
         Ingredient orderedIngredient = ingredientProvider.provideIngredient(name, amount);
-        Ingredient ingredientInDb = findIngredientByName(name);
-        return saveIngredient(ingredientInDb.setAmount(ingredientInDb.getAmount() + orderedIngredient.getAmount()));
+
+        final Ingredient ingredient = saveIngredient(ingredientInDb.setAmount(ingredientInDb.getAmount() + orderedIngredient.getAmount()));
+
+        storageEventPublisher.publishEvent(new IngredientChangedEvent(storageEventPublisher, ingredient));
+
+        return ingredient;
     }
 
     @Override
@@ -56,6 +65,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient saveIngredient(Ingredient ingredient) {
+        storageEventPublisher.publishEvent(new NewIngredientEvent(storageEventPublisher, ingredient));
         return ingredientRepository.save(ingredient);
     }
 
@@ -65,12 +75,15 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient updateIngredientAmount(String ingredientName, Long amount) {
+    public Ingredient takeIngredients(String ingredientName, Long amount) {
         Ingredient ingredient = findIngredientByName(ingredientName);
         if (amount > ingredient.getAmount()) {
             throw new RuntimeException("There is no enough ingredients on storage. Request some from provider!");
         }
-        ingredientRepository.save(ingredient.setAmount(ingredient.getAmount() - amount));
+        final Ingredient updatedIngredient = ingredientRepository.save(ingredient.setAmount(ingredient.getAmount() - amount));
+
+        storageEventPublisher.publishEvent(new IngredientChangedEvent(storageEventPublisher, updatedIngredient));
+
         return ingredient.setAmount(amount);
     }
 }

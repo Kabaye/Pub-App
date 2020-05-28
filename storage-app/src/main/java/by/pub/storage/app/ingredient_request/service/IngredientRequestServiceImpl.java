@@ -1,6 +1,5 @@
 package by.pub.storage.app.ingredient_request.service;
 
-import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
@@ -40,7 +39,7 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
 
     @Override
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
-        ingredientService.updateIngredientAmount(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
+        ingredientService.takeIngredients(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
         ingredientRequestRestTemplate.acceptIngredientRequest(ingredientRequest);
         return ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED);
     }
