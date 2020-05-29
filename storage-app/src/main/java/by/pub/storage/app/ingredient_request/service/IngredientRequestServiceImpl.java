@@ -5,7 +5,7 @@ import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import by.pub.storage.app.ingredient_request.repository.IngredientRequestRepository;
-import by.pub.storage.app.ingredient_request.web_client.IngredientRequestRestTemplate;
+import by.pub.storage.app.websocket.web_client.IngredientRequestWebClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +17,12 @@ import static by.pub.storage.app.event.entity.StorageAppEventType.NEW_INGREDIENT
 public class IngredientRequestServiceImpl implements IngredientRequestService {
     private final IngredientRequestRepository ingredientRequestRepository;
     private final IngredientService ingredientService;
-    private final IngredientRequestRestTemplate ingredientRequestRestTemplate;
+    private final IngredientRequestWebClient ingredientRequestWebClient;
 
-    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository, IngredientService ingredientService, IngredientRequestRestTemplate ingredientRequestRestTemplate) {
+    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository, IngredientService ingredientService, IngredientRequestWebClient ingredientRequestWebClient) {
         this.ingredientRequestRepository = ingredientRequestRepository;
         this.ingredientService = ingredientService;
-        this.ingredientRequestRestTemplate = ingredientRequestRestTemplate;
+        this.ingredientRequestWebClient = ingredientRequestWebClient;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     @EventPublishingType(INGREDIENT_CHANGED_EVENT)
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
         ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
-        ingredientRequestRestTemplate.acceptIngredientRequest(ingredientRequest);
+        ingredientRequestWebClient.acceptIngredientRequest(ingredientRequest);
         return ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED);
     }
 
