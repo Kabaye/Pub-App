@@ -26,6 +26,12 @@ public class IngredientRequestTableModel extends DefaultTableModel {
         ingredientRequests.add(ingredientRequest);
     }
 
+    @Override
+    public void removeRow(int row) {
+        super.removeRow(row);
+        ingredientRequests.remove(row);
+    }
+
     public IngredientRequest getValueAt(int rowIndex) {
         return ingredientRequests.get(rowIndex);
     }

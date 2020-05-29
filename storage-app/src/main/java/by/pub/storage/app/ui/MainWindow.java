@@ -1,8 +1,10 @@
 package by.pub.storage.app.ui;
 
-import by.pub.storage.app.ingredient.entity.Ingredient;
+import by.pub.storage.app.event.entity.IngredientChangedEvent;
+import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
 import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
 import by.pub.storage.app.ui.dialog.RequestProviderDialog;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
@@ -10,6 +12,7 @@ import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
 import by.pub.storage.app.ui.table.IngredientRequestTable;
 import by.pub.storage.app.ui.table.IngredientTable;
 import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
+import by.pub.storage.app.ui.table_model.IngredientTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,8 +29,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -50,7 +52,7 @@ public class MainWindow extends JFrame {
     private final JLabel ingredientRequestLabel;
     private final JTable ingredientTable;
     private final JTable ingredientRequestTable;
-    private final TableModel ingredientTableModel;
+    private final IngredientTableModel ingredientTableModel;
     private final IngredientRequestTableModel ingredientRequestTableModel;
     private final JButton ingredientRequestButton;
     private final JButton fulfillButton;
@@ -76,7 +78,8 @@ public class MainWindow extends JFrame {
         ingredientRequestLabel = new JLabel("Requests from bartender");
 
         ingredientPanel = new JPanel(new BorderLayout());
-        ingredientTableModel = new DefaultTableModel(INGREDIENT_TABLE_HEADER, 0);
+        ingredientTableModel = new IngredientTableModel(ingredientService.findAllIngredients(),
+            INGREDIENT_TABLE_HEADER, 0);
         ingredientTable = new IngredientTable(ingredientTableModel);
         ingredientScrollPane = new JScrollPane(ingredientTable);
         ingredientRequestButton = new JButton("Request ingredients");
@@ -88,15 +91,6 @@ public class MainWindow extends JFrame {
         addComponentsToMainPanel();
         configureComponents();
         setWindowPreferences();
-
-        fullIngredientTable();
-//        fullIngredientRequestTable();
-    }
-
-    private void fullIngredientTable() {
-        for (Ingredient ingredient : ingredientService.findAllIngredients()) {
-            addIngredient(ingredient);
-        }
     }
 
     private void addListeners() {
@@ -105,13 +99,22 @@ public class MainWindow extends JFrame {
             int index = selectionModel.getMinSelectionIndex();
             IngredientRequest ingredientRequest;
             if (index >= 0) {
-                try {
-                    ingredientRequest = ingredientRequestService
-                        .acceptIngredientRequest(ingredientRequestTableModel.getValueAt(index));
-                } catch (RuntimeException exception) {
+                ingredientRequest = ingredientRequestTableModel.getValueAt(index);
+                if (ingredientRequest.getStatus().equals(IngredientRequestStatus.NOT_ACCEPTED)) {
+                    try {
+                        ingredientRequest = ingredientRequestService
+                            .acceptIngredientRequest(ingredientRequest);
+                        ingredientRequestTableModel.removeRow(index);
+                        ingredientRequestTableModel.addRow(ingredientRequest);
+                    } catch (RuntimeException exception) {
+                        JOptionPane
+                            .showMessageDialog(MainWindow.this,
+                                exception.getMessage());
+                    }
+                } else {
                     JOptionPane
-                        .showConfirmDialog(MainWindow.this,
-                            exception.getMessage());
+                        .showMessageDialog(MainWindow.this,
+                            "Request is already accepted");
                 }
             }
         });
@@ -197,20 +200,14 @@ public class MainWindow extends JFrame {
         pack();
     }
 
-    public void addIngredient(Ingredient ingredient) {
-        ((DefaultTableModel) ingredientTableModel)
-            .addRow(new Object[]{ingredient.getName(), ingredient.getAmount()});
+    @EventListener
+    public void handleIngredientChanging(IngredientChangedEvent event) {
+        ingredientTableModel.removeRow(event.getIngredient());
+        ingredientTableModel.addRow(event.getIngredient());
     }
 
-//    @EventListener
-//    public void handleIngrChanged(IngredientChangedEvent event) {
-//        ingredientDefaultListModel.addElement(event.getChangedIngredient());
-//        System.out.println("IngredientChangedEvent: " + event.getChangedIngredient());
-//    }
-//
-//    @EventListener
-//    public void handleNewIngr(NewIngredientEvent event) {
-//        ingredientDefaultListModel.addElement(event.getNewIngredient());
-//        System.out.println("NewIngredientEvent: " + event.getNewIngredient());
-//    }
+    @EventListener
+    public void handleIngredientRequesting(NewIngredientRequestEvent event) {
+        ingredientRequestTableModel.addRow(event.getIngredientRequest());
+    }
 }

@@ -1,39 +1,53 @@
 package by.pub.storage.app.ui.table_model;
 
-import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.ingredient.entity.Ingredient;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class IngredientTableModel extends DefaultTableModel {
 
-    List<IngredientRequest> ingredientRequests;
+    List<Ingredient> ingredients;
 
-    public IngredientTableModel(List<IngredientRequest> list, Object[] columnNames,
+    public IngredientTableModel(List<Ingredient> list, Object[] columnNames,
         int rowCount) {
         super(columnNames, rowCount);
-        ingredientRequests = list;
-        for (IngredientRequest ingredientRequest : list) {
+        ingredients = list;
+        for (Ingredient ingredientRequest : list) {
             addRow(new Object[]{
-                ingredientRequest.getIngredientName(),
-                ingredientRequest.getIngredientAmount()});
+                ingredientRequest.getName(),
+                ingredientRequest.getAmount()});
         }
     }
 
-    public void addRow(IngredientRequest ingredientRequest) {
+    public void addRow(Ingredient ingredient) {
         super.addRow(
             new Object[]{
-                ingredientRequest.getIngredientName(),
-                ingredientRequest.getIngredientAmount()});
-        ingredientRequests.add(ingredientRequest);
+                ingredient.getName(),
+                ingredient.getAmount()});
+        ingredients.add(ingredient);
     }
 
     @Override
     public void removeRow(int row) {
         super.removeRow(row);
-        ingredientRequests.remove(row);
+        ingredients.remove(row);
     }
 
-    public IngredientRequest getValueAt(int rowIndex) {
-        return ingredientRequests.get(rowIndex);
+    public void removeRow(Ingredient ingredient) {
+        int index = getIndexByName(ingredient.getName());
+        removeRow(index);
+    }
+
+    public Ingredient getValueAt(int rowIndex) {
+        return ingredients.get(rowIndex);
+    }
+
+    private int getIndexByName(String name) {
+        for (int i = 0; i < ingredients.size(); i++) {
+            if ((name.compareTo(ingredients.get(i).getName()) == 0)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
