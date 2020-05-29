@@ -1,4 +1,4 @@
-package by.pub.storage.app.config;
+package by.pub.storage.app.websocket.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

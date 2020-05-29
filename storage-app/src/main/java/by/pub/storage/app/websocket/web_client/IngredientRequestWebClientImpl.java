@@ -14,6 +14,6 @@ public class IngredientRequestWebClientImpl implements IngredientRequestWebClien
 
     @Override
     public void acceptIngredientRequest(IngredientRequest ingredientRequest) {
-        simpMessagingTemplate.convertAndSend("/storage-app/accept-request", ingredientRequest);
+        simpMessagingTemplate.convertAndSend("/storage-app/accept-ingredient-request", ingredientRequest);
     }
 }
