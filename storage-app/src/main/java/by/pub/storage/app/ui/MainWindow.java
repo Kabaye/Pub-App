@@ -101,10 +101,15 @@ public class MainWindow extends JFrame {
     private void addListeners() {
         fulfillButton.addActionListener(e -> {
             ListSelectionModel selectionModel = ingredientRequestTable.getSelectionModel();
+            DefaultTableModel model = (DefaultTableModel) ingredientRequestTableModel;
+            Ingredient ingredient;
             int index = selectionModel.getMinSelectionIndex();
             if (index >= 0) {
-
-                ((DefaultTableModel) ingredientRequestTableModel).removeRow(index);
+                ingredient = ingredientService
+                    .findIngredientByName((String) model.getValueAt(index, 1));
+                model.removeRow(index);
+                ingredient.setAmount(0L);
+                System.out.println(ingredient);
             }
         });
         ingredientRequestButton.addActionListener(e -> {
