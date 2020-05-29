@@ -21,11 +21,13 @@ import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -65,7 +67,8 @@ public class MainWindow extends JFrame {
     private final JButton logInButton;
     private final JButton exitButton;
     private final JTextField usernameTextField;
-    private final JTextField passwordTextField;
+    private final JPasswordField passwordTextField;
+    private final JCheckBox passwordCheckBox;
 
     private final IngredientService ingredientService;
     private final IngredientRequestService ingredientRequestService;
@@ -81,13 +84,14 @@ public class MainWindow extends JFrame {
         this.credentialsService = credentialsService;
         this.requestProviderDialog = requestProviderDialog;
         //authPanel
-        authPanel = new JPanel(new GridLayout(3, 2));
+        authPanel = new JPanel(new GridLayout(4, 2, 1, 0));
         usernameLabel = new JLabel("Username", JLabel.CENTER);
         passwordLabel = new JLabel("Password", JLabel.CENTER);
         usernameTextField = new JTextField();
-        passwordTextField = new JTextField();
+        passwordTextField = new JPasswordField();
         logInButton = new JButton("Log in");
         exitButton = new JButton("Exit");
+        passwordCheckBox = new JCheckBox("Show password", false);
         addComponentsToAuthPanel();
         configureAuthPanelComponents();
         //mainPanel
@@ -122,6 +126,8 @@ public class MainWindow extends JFrame {
         authPanel.add(passwordLabel);
         authPanel.add(usernameTextField);
         authPanel.add(passwordTextField);
+        authPanel.add(new JPanel());
+        authPanel.add(passwordCheckBox);
         authPanel.add(exitButton);
         authPanel.add(logInButton);
     }
@@ -131,13 +137,22 @@ public class MainWindow extends JFrame {
         passwordLabel.setFont(TEXT_FONT);
         logInButton.setFont(TEXT_FONT);
         exitButton.setFont(TEXT_FONT);
+        passwordTextField.setEchoChar('*');
     }
 
     private void addListeners() {
         // TODO: 5/30/20 replace password with * and sign out ability
+        passwordCheckBox.addActionListener(e -> {
+            if (passwordCheckBox.isSelected()) {
+                passwordTextField.setEchoChar((char) 0);
+            } else {
+                passwordTextField.setEchoChar('*');
+            }
+        });
         logInButton.addActionListener(e -> {
             if (credentialsService
-                .checkCredentials(usernameTextField.getText(), passwordTextField.getText())) {
+                .checkCredentials(usernameTextField.getText(),
+                    new String(passwordTextField.getPassword()))) {
                 JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
                 contentPane.removeAll();
                 contentPane.setLayout(new BorderLayout());
