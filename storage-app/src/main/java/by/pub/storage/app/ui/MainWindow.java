@@ -3,6 +3,8 @@ package by.pub.storage.app.ui;
 import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
+import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
+import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,8 +26,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MainWindow extends JFrame {
 
-    private final JPanel ingredientPanel;
-
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
     private static final Object[] INGREDIENT_TABLE_HEADER = new String[]{"Name", "Amount"};
     private static final Object[] INGREDIENT_REQUEST_TABLE_HEADER = new String[]{"ID", "Name",
@@ -36,16 +36,17 @@ public class MainWindow extends JFrame {
     private final JPanel mainPanel;
     private final JPanel authPanel;
     private final JScrollPane ingredientScrollPane;
-    private final JPanel ingredientRequestPanel;
     private final JScrollPane ingredientRequestScrollPane;
-    private final TableModel ingredientRequestTableModel;
+    private final JPanel ingredientPanel;
+    private final JPanel ingredientRequestPanel;
     private final JLabel ingredientLabel;
     private final JLabel ingredientRequestLabel;
-    private final TableModel ingredientTableModel;
-    private final JButton fulfillButton;
     private final JTable ingredientTable;
     private final JTable ingredientRequestTable;
+    private final TableModel ingredientTableModel;
+    private final TableModel ingredientRequestTableModel;
     private final JButton ingredientRequestButton;
+    private final JButton fulfillButton;
 
     public MainWindow() {
         authPanel = new JPanel();
@@ -142,7 +143,19 @@ public class MainWindow extends JFrame {
             .setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
         //table configuration
         ingredientTable.setFillsViewportHeight(true);
+        for (int i = 0; i < ingredientTable.getColumnCount(); i++) {
+            ingredientTable.getColumnModel().getColumn(i)
+                .setCellRenderer(new IngredientRequestTextRenderer());
+        }
         ingredientRequestTable.setFillsViewportHeight(true);
+        for (int i = 0; i < ingredientRequestTable.getColumnCount() - 1; i++) {
+            ingredientRequestTable.getColumnModel().getColumn(i)
+                .setCellRenderer(new IngredientRequestTextRenderer());
+        }
+        ingredientRequestTable.getColumnModel()
+            .getColumn(ingredientRequestTable.getColumnCount() - 1)
+            .setCellRenderer(new IngredientRequestStatusRenderer());
+
         //labels configuration
         ingredientLabel.setFont(HEADER_FONT);
         ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -151,7 +164,6 @@ public class MainWindow extends JFrame {
         //buttons configuration
         fulfillButton.setFont(HEADER_FONT);
         ingredientRequestButton.setFont(HEADER_FONT);
-
     }
 
     private void setWindowPreferences() {
