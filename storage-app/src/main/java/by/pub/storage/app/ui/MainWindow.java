@@ -6,6 +6,7 @@ import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
+import by.pub.storage.app.security.service.CredentialsService;
 import by.pub.storage.app.ui.dialog.RequestProviderDialog;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
 import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
@@ -68,13 +69,16 @@ public class MainWindow extends JFrame {
 
     private final IngredientService ingredientService;
     private final IngredientRequestService ingredientRequestService;
+    private final CredentialsService credentialsService;
     private final RequestProviderDialog requestProviderDialog;
 
     public MainWindow(IngredientService ingredientService,
         IngredientRequestService ingredientRequestService,
+        CredentialsService credentialsService,
         RequestProviderDialog requestProviderDialog) {
         this.ingredientService = ingredientService;
         this.ingredientRequestService = ingredientRequestService;
+        this.credentialsService = credentialsService;
         this.requestProviderDialog = requestProviderDialog;
         //authPanel
         authPanel = new JPanel(new GridLayout(3, 2));
@@ -130,15 +134,22 @@ public class MainWindow extends JFrame {
     }
 
     private void addListeners() {
-        // TODO: 5/29/20 Make proper auth
+        // TODO: 5/30/20 replace password with * and sign out ability
         logInButton.addActionListener(e -> {
-            JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
-            contentPane.removeAll();
-            contentPane.setLayout(new BorderLayout());
-            contentPane.add(mainPanel, BorderLayout.CENTER);
-            contentPane.revalidate();
-            contentPane.repaint();
-            MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            if (credentialsService
+                .checkCredentials(usernameTextField.getText(), passwordTextField.getText())) {
+                JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
+                contentPane.removeAll();
+                contentPane.setLayout(new BorderLayout());
+                contentPane.add(mainPanel, BorderLayout.CENTER);
+                contentPane.revalidate();
+                contentPane.repaint();
+                MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            } else {
+                JOptionPane
+                    .showMessageDialog(MainWindow.this,
+                        "Invalid login and password");
+            }
         });
         exitButton.addActionListener(e -> MainWindow.this
             .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
