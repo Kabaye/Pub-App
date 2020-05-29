@@ -18,14 +18,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * This class is an implementation for <code>StompSessionHandlerAdapter</code>.
- * Once a connection is established, We subscribe to /topic/messages and
- * send a sample message to server.
- *
- * @author Kalyan
- */
-
 @Component
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomWebSocketClient.class);
@@ -56,11 +48,13 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         LOGGER.error("Received error on socket channel with session id: " + session.getSessionId(), exception);
     }
 
+    //TODO 30.05.2020 check this
     @Override
     public Type getPayloadType(StompHeaders headers) {
         return IngredientRequest.class;
     }
 
+    //TODO 30.05.2020 Use service here
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
         IngredientRequest msg = (IngredientRequest) payload;
