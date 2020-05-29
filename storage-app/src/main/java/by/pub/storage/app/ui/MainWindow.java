@@ -1,8 +1,9 @@
 package by.pub.storage.app.ui;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
+import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
+import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
 import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
 import java.awt.BorderLayout;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
@@ -48,9 +50,15 @@ public class MainWindow extends JFrame {
     private final JButton ingredientRequestButton;
     private final JButton fulfillButton;
 
-    public MainWindow() {
-        authPanel = new JPanel();
+    private final IngredientService ingredientService;
+    private final IngredientRequestService ingredientRequestService;
 
+    public MainWindow(IngredientService ingredientService,
+        IngredientRequestService ingredientRequestService) {
+        this.ingredientService = ingredientService;
+        this.ingredientRequestService = ingredientRequestService;
+
+        authPanel = new JPanel();
         mainPanel = new JPanel(new GridLayout(1, 2));
 
         ingredientRequestPanel = new JPanel(new BorderLayout());
@@ -74,38 +82,30 @@ public class MainWindow extends JFrame {
         configureComponents();
         setWindowPreferences();
 
+        fullIngredientTable();
+        fullIngredientRequestTable();
     }
 
-    public static void main(String[] args) {
-        MainWindow window = new MainWindow();
-        window.setVisible(true);
-
-        for (int i = 0; i < 50; i++) {
-            window.addIngredientRequest(
-                new IngredientRequest("1", "11", "Beer", 10L, IngredientRequestStatus.ACCEPTED));
-            window.addIngredientRequest(
-                new IngredientRequest("2", "22", "Vodka", 1L,
-                    IngredientRequestStatus.NOT_ACCEPTED));
-            window.addIngredientRequest(
-                new IngredientRequest("3", "33", "Jin", 15L, IngredientRequestStatus.ACCEPTED));
-            window.addIngredientRequest(
-                new IngredientRequest("4", "44", "Lemon", 18L, IngredientRequestStatus.ACCEPTED));
-
+    private void fullIngredientRequestTable() {
+        for (IngredientRequest ingredientRequest : ingredientRequestService.findAll()) {
+            addIngredientRequest(ingredientRequest);
         }
+    }
 
-        for (int i = 0; i < 50; i++) {
-            window.addIngredient(
-                new Ingredient("1", "Beer", 10L + (long) i));
+    private void fullIngredientTable() {
+        for (Ingredient ingredient : ingredientService.findAllIngredients()) {
+            addIngredient(ingredient);
         }
     }
 
     private void addListeners() {
         fulfillButton.addActionListener(e -> {
-//            ListSelectionModel selectionModel = ingredientRequestJList.getSelectionModel();
-//            int index = selectionModel.getMinSelectionIndex();
-//            if (index >= 0) {
-//                removeIngredientRequest(index);
-//            }
+            ListSelectionModel selectionModel = ingredientRequestTable.getSelectionModel();
+            int index = selectionModel.getMinSelectionIndex();
+            if (index >= 0) {
+
+                ((DefaultTableModel) ingredientRequestTableModel).removeRow(index);
+            }
         });
         ingredientRequestButton.addActionListener(e -> {
             JDialog dialog = new RequestProviderDialog(MainWindow.this);
@@ -131,17 +131,26 @@ public class MainWindow extends JFrame {
     }
 
     private void configureComponents() {
-        //panels configuration
-        ingredientRequestPanel.setBorder(BorderFactory.createBevelBorder(1));
-        ingredientPanel.setBorder(BorderFactory.createBevelBorder(1));
-        //scrollPane configuration
-        ingredientScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ingredientScrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
-        ingredientRequestScrollPane
-            .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ingredientRequestScrollPane
-            .setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
-        //table configuration
+        configurePanels();
+        configureScrollPanes();
+        configureTables();
+        configureLabels();
+        configureButtons();
+    }
+
+    private void configureButtons() {
+        fulfillButton.setFont(HEADER_FONT);
+        ingredientRequestButton.setFont(HEADER_FONT);
+    }
+
+    private void configureLabels() {
+        ingredientLabel.setFont(HEADER_FONT);
+        ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        ingredientRequestLabel.setFont(HEADER_FONT);
+        ingredientRequestLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    private void configureTables() {
         ingredientTable.setFillsViewportHeight(true);
         for (int i = 0; i < ingredientTable.getColumnCount(); i++) {
             ingredientTable.getColumnModel().getColumn(i)
@@ -155,15 +164,21 @@ public class MainWindow extends JFrame {
         ingredientRequestTable.getColumnModel()
             .getColumn(ingredientRequestTable.getColumnCount() - 1)
             .setCellRenderer(new IngredientRequestStatusRenderer());
+        ingredientRequestTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
 
-        //labels configuration
-        ingredientLabel.setFont(HEADER_FONT);
-        ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        ingredientRequestLabel.setFont(HEADER_FONT);
-        ingredientRequestLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        //buttons configuration
-        fulfillButton.setFont(HEADER_FONT);
-        ingredientRequestButton.setFont(HEADER_FONT);
+    private void configureScrollPanes() {
+        ingredientScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        ingredientScrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
+        ingredientRequestScrollPane
+            .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        ingredientRequestScrollPane
+            .setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
+    }
+
+    private void configurePanels() {
+        ingredientRequestPanel.setBorder(BorderFactory.createBevelBorder(1));
+        ingredientPanel.setBorder(BorderFactory.createBevelBorder(1));
     }
 
     private void setWindowPreferences() {
