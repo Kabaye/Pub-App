@@ -1,6 +1,5 @@
-package by.pub.storage.app.ingredient.publisher;
+package by.pub.storage.app.event.publisher;
 
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +12,7 @@ public class StorageEventPublisherImpl implements StorageEventPublisher {
     }
 
     @Override
-    public void publishEvent(ApplicationEvent applicationEvent) {
-        System.out.println("event published: " + applicationEvent.getClass().getSimpleName());
-        System.out.println(Thread.currentThread().getName());
-        publisher.publishEvent(applicationEvent);
+    public void publishEvent(Object event) {
+        publisher.publishEvent(event);
     }
 }

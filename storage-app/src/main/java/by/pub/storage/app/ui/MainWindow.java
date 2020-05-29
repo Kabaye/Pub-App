@@ -1,10 +1,7 @@
 package by.pub.storage.app.ui;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
-import by.pub.storage.app.ingredient.event.IngredientChangedEvent;
-import by.pub.storage.app.ingredient.event.NewIngredientEvent;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.swing.DefaultListModel;
@@ -84,17 +81,19 @@ public class MainWindow extends JFrame {
         pack();
     }
 
-    @EventListener
-    public void handleIngrChanged(IngredientChangedEvent event) {
-        System.out.println(Thread.currentThread().getName());
-        ingredientDefaultListModel.addElement(event.getChangedIngredient());
-        System.out.println("IngredientChangedEvent: " + event.getChangedIngredient());
-    }
+    /**
+     * вот так юзать мои ивенты. Они в пакете event.entity
+     */
 
-    @EventListener
-    public void handleNewIngr(NewIngredientEvent event) {
-        System.out.println(Thread.currentThread().getName());
-        ingredientDefaultListModel.addElement(event.getNewIngredient());
-        System.out.println("NewIngredientEvent: " + event.getNewIngredient());
-    }
+//    @EventListener
+//    public void handleIngrChanged(IngredientChangedEvent event) {
+////        ingredientDefaultListModel.addElement(event.getIngredient());
+//        System.out.println(event.getIngredient());
+//    }
+//
+//    @EventListener
+//    public void handleIngrChanged2(NewIngredientRequestEvent event) {
+////        ingredientDefaultListModel.addElement(event.getIngredient());
+//        System.out.println(event.getIngredientRequest());
+//    }
 }

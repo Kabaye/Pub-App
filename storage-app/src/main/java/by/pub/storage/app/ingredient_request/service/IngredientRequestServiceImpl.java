@@ -1,5 +1,6 @@
 package by.pub.storage.app.ingredient_request.service;
 
+import by.pub.storage.app.event.annotation.EventPublishingType;
 import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
@@ -8,6 +9,9 @@ import by.pub.storage.app.ingredient_request.web_client.IngredientRequestRestTem
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static by.pub.storage.app.event.entity.StorageAppEventType.INGREDIENT_CHANGED_EVENT;
+import static by.pub.storage.app.event.entity.StorageAppEventType.NEW_INGREDIENT_REQUEST_EVENT;
 
 @Service
 public class IngredientRequestServiceImpl implements IngredientRequestService {
@@ -33,11 +37,13 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     }
 
     @Override
+    @EventPublishingType(NEW_INGREDIENT_REQUEST_EVENT)
     public IngredientRequest saveIngredientRequest(IngredientRequest ingredientRequest) {
         return ingredientRequestRepository.save(ingredientRequest);
     }
 
     @Override
+    @EventPublishingType(INGREDIENT_CHANGED_EVENT)
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
         ingredientService.takeIngredients(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
         ingredientRequestRestTemplate.acceptIngredientRequest(ingredientRequest);
