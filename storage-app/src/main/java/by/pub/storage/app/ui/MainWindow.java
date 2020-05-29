@@ -17,15 +17,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -36,6 +38,7 @@ import org.springframework.stereotype.Component;
 public class MainWindow extends JFrame {
 
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
+    private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 25);
     private static final Object[] INGREDIENT_TABLE_HEADER = new String[]{"Name", "Amount"};
     private static final Object[] INGREDIENT_REQUEST_TABLE_HEADER = new String[]{"ID", "Name",
         "Amount", "Status"};
@@ -50,24 +53,41 @@ public class MainWindow extends JFrame {
     private final JPanel ingredientRequestPanel;
     private final JLabel ingredientLabel;
     private final JLabel ingredientRequestLabel;
+    private final JLabel usernameLabel;
+    private final JLabel passwordLabel;
     private final JTable ingredientTable;
     private final JTable ingredientRequestTable;
     private final IngredientTableModel ingredientTableModel;
     private final IngredientRequestTableModel ingredientRequestTableModel;
     private final JButton ingredientRequestButton;
     private final JButton fulfillButton;
+    private final JButton logInButton;
+    private final JButton exitButton;
+    private final JTextField usernameTextField;
+    private final JTextField passwordTextField;
 
     private final IngredientService ingredientService;
     private final IngredientRequestService ingredientRequestService;
+    private final RequestProviderDialog requestProviderDialog;
 
     public MainWindow(IngredientService ingredientService,
-        IngredientRequestService ingredientRequestService) {
+        IngredientRequestService ingredientRequestService,
+        RequestProviderDialog requestProviderDialog) {
         this.ingredientService = ingredientService;
         this.ingredientRequestService = ingredientRequestService;
-
-        authPanel = new JPanel();
+        this.requestProviderDialog = requestProviderDialog;
+        //authPanel
+        authPanel = new JPanel(new GridLayout(3, 2));
+        usernameLabel = new JLabel("Username", JLabel.CENTER);
+        passwordLabel = new JLabel("Password", JLabel.CENTER);
+        usernameTextField = new JTextField();
+        passwordTextField = new JTextField();
+        logInButton = new JButton("Log in");
+        exitButton = new JButton("Exit");
+        addComponentsToAuthPanel();
+        configureAuthPanelComponents();
+        //mainPanel
         mainPanel = new JPanel(new GridLayout(1, 2));
-
         ingredientRequestPanel = new JPanel(new BorderLayout());
         ingredientRequestTableModel = new IngredientRequestTableModel(
             ingredientRequestService.findAllIngredientRequests(), INGREDIENT_REQUEST_TABLE_HEADER,
@@ -93,7 +113,35 @@ public class MainWindow extends JFrame {
         setWindowPreferences();
     }
 
+    private void addComponentsToAuthPanel() {
+        authPanel.add(usernameLabel);
+        authPanel.add(passwordLabel);
+        authPanel.add(usernameTextField);
+        authPanel.add(passwordTextField);
+        authPanel.add(exitButton);
+        authPanel.add(logInButton);
+    }
+
+    private void configureAuthPanelComponents() {
+        usernameLabel.setFont(TEXT_FONT);
+        passwordLabel.setFont(TEXT_FONT);
+        logInButton.setFont(TEXT_FONT);
+        exitButton.setFont(TEXT_FONT);
+    }
+
     private void addListeners() {
+        // TODO: 5/29/20 Make proper auth
+        logInButton.addActionListener(e -> {
+            JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
+            contentPane.removeAll();
+            contentPane.setLayout(new BorderLayout());
+            contentPane.add(mainPanel, BorderLayout.CENTER);
+            contentPane.revalidate();
+            contentPane.repaint();
+            MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        });
+        exitButton.addActionListener(e -> MainWindow.this
+            .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
         fulfillButton.addActionListener(e -> {
             ListSelectionModel selectionModel = ingredientRequestTable.getSelectionModel();
             int index = selectionModel.getMinSelectionIndex();
@@ -118,10 +166,7 @@ public class MainWindow extends JFrame {
                 }
             }
         });
-        ingredientRequestButton.addActionListener(e -> {
-            JDialog dialog = new RequestProviderDialog(MainWindow.this);
-            dialog.setVisible(true);
-        });
+        ingredientRequestButton.addActionListener(e -> requestProviderDialog.setVisible(true));
     }
 
     private void addComponentsToIngredientPanel() {
@@ -193,8 +238,9 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
-        setContentPane(mainPanel);
-        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        setContentPane(authPanel);
+        setBounds(0, 0, SCREEN_WIDTH / 10, SCREEN_HEIGHT / 20);
+//        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
@@ -204,7 +250,15 @@ public class MainWindow extends JFrame {
     public void handleIngredientChanging(IngredientChangedEvent event) {
         ingredientTableModel.removeRow(event.getIngredient());
         ingredientTableModel.addRow(event.getIngredient());
+        System.out.println("Changing" + event.getIngredient());
     }
+
+//    @EventListener
+//    public void handleIngredientSaving(IngredientSavedEvent event) {
+//        ingredientTableModel.removeRow(event.getIngredient());
+//        ingredientTableModel.addRow(event.getIngredient());
+//        System.out.println("Saving"+event.getIngredient());
+//    }
 
     @EventListener
     public void handleIngredientRequesting(NewIngredientRequestEvent event) {

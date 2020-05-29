@@ -35,7 +35,9 @@ public class IngredientTableModel extends DefaultTableModel {
 
     public void removeRow(Ingredient ingredient) {
         int index = getIndexByName(ingredient.getName());
-        removeRow(index);
+        if (index >= 0) {
+            removeRow(index);
+        }
     }
 
     public Ingredient getValueAt(int rowIndex) {

@@ -1,5 +1,7 @@
 package by.pub.storage.app.ui.dialog;
 
+import by.pub.storage.app.ingredient.entity.Ingredient;
+import by.pub.storage.app.ingredient.service.IngredientService;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,10 +11,13 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RequestProviderDialog extends JDialog {
 
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 15);
@@ -29,8 +34,12 @@ public class RequestProviderDialog extends JDialog {
     private final JButton requestButton;
     private final JButton cancelButton;
 
-    public RequestProviderDialog(JFrame owner) {
-        super(owner, "Request for ingredients");
+    private final IngredientService ingredientService;
+
+    public RequestProviderDialog(
+        IngredientService ingredientService) {
+        super((JFrame) null, "Request for ingredients");
+        this.ingredientService = ingredientService;
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -44,9 +53,30 @@ public class RequestProviderDialog extends JDialog {
         requestButton = new JButton("Request");
         cancelButton = new JButton("Cancel");
 
+        addListeners();
         addComponentsToMainPanel();
         configureComponents();
         setWindowPreferences();
+    }
+
+    private void addListeners() {
+        requestButton.addActionListener(e -> {
+            try {
+                String name = nameTextField.getText();
+                Long amount = Long.parseLong(amountTextField.getText());
+                try {
+                    ingredientService.orderIngredient(name, amount);
+                } catch (RuntimeException exception) {
+                    ingredientService
+                        .saveIngredient(new Ingredient().setName(name).setAmount(amount));
+                }
+            } catch (Exception exception) {
+                JOptionPane
+                    .showMessageDialog(RequestProviderDialog.this,
+                        exception.getMessage());
+            }
+        });
+        cancelButton.addActionListener(e -> setVisible(false));
     }
 
     private void addComponentsToMainPanel() {

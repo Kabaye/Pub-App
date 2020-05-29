@@ -9,7 +9,4 @@ import lombok.EqualsAndHashCode;
 public class NewIngredientRequestEvent extends StorageAppEvent {
     private final IngredientRequest ingredientRequest;
 
-    public NewIngredientRequestEvent(IngredientRequest ingredientRequest) {
-        this.ingredientRequest = ingredientRequest;
-    }
 }
