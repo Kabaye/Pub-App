@@ -71,7 +71,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @EventPublishingType(INGREDIENT_CHANGED_EVENT)
-    public Ingredient takeIngredients(String ingredientName, Long amount) {
+    public Ingredient takeIngredientsFromStorage(String ingredientName, Long amount) {
         Ingredient ingredient = findIngredientByName(ingredientName);
         if (amount > ingredient.getAmount()) {
             throw new RuntimeException("There is no enough ingredients on storage. Request some from provider!");

@@ -7,7 +7,7 @@ import java.util.List;
 public interface IngredientRequestService {
     IngredientRequest findByRequestId(String requestId);
 
-    List<IngredientRequest> findAll();
+    List<IngredientRequest> findAllIngredientRequests();
 
     IngredientRequest saveIngredientRequest(IngredientRequest ingredientRequest);
 

@@ -26,6 +26,6 @@ public class IngredientRequestController {
 
     @GetMapping
     public List<IngredientRequest> findAll() {
-        return ingredientRequestService.findAll();
+        return ingredientRequestService.findAllIngredientRequests();
     }
 }

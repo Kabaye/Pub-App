@@ -32,7 +32,7 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     }
 
     @Override
-    public List<IngredientRequest> findAll() {
+    public List<IngredientRequest> findAllIngredientRequests() {
         return ingredientRequestRepository.findAll();
     }
 
@@ -45,7 +45,7 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     @Override
     @EventPublishingType(INGREDIENT_CHANGED_EVENT)
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
-        ingredientService.takeIngredients(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
+        ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
         ingredientRequestRestTemplate.acceptIngredientRequest(ingredientRequest);
         return ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED);
     }

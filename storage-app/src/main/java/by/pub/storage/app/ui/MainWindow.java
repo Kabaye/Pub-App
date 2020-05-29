@@ -6,10 +6,8 @@ import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
 import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,7 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 
 @Component
 public class MainWindow extends JFrame {
@@ -87,7 +88,7 @@ public class MainWindow extends JFrame {
     }
 
     private void fullIngredientRequestTable() {
-        for (IngredientRequest ingredientRequest : ingredientRequestService.findAll()) {
+        for (IngredientRequest ingredientRequest : ingredientRequestService.findAllIngredientRequests()) {
             addIngredientRequest(ingredientRequest);
         }
     }

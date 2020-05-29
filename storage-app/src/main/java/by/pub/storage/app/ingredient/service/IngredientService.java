@@ -18,5 +18,5 @@ public interface IngredientService {
 
     void deleteIngredientByName(String name);
 
-    Ingredient takeIngredients(String ingredientName, Long amount);
+    Ingredient takeIngredientsFromStorage(String ingredientName, Long amount);
 }
