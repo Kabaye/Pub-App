@@ -2,7 +2,9 @@ package by.pub.storage.app.ui;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -70,10 +72,14 @@ public class MainWindow extends JFrame {
         configureComponents();
         setWindowPreferences();
 
-        addIngredientRequest(new IngredientRequest());
-        addIngredientRequest(new IngredientRequest());
-        addIngredientRequest(new IngredientRequest());
-        addIngredientRequest(new IngredientRequest());
+        addIngredientRequest(
+            new IngredientRequest("1", "11", "Beer", 10L, IngredientRequestStatus.ACCEPTED));
+        addIngredientRequest(
+            new IngredientRequest("2", "22", "Vodka", 1L, IngredientRequestStatus.NOT_ACCEPTED));
+        addIngredientRequest(
+            new IngredientRequest("3", "33", "Jin", 15L, IngredientRequestStatus.ACCEPTED));
+        addIngredientRequest(
+            new IngredientRequest("4", "44", "Lemon", 18L, IngredientRequestStatus.ACCEPTED));
     }
 
     public static void main(String[] args) {
@@ -120,6 +126,8 @@ public class MainWindow extends JFrame {
         ingredientRequestJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
         ingredientJList.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
         ingredientRequestJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ingredientRequestJList.setCellRenderer(new IngredientRequestRenderer());
+        ingredientRequestJList.setSelectionForeground(Color.BLUE);
         //labels configuration
         ingredientLabel.setFont(HEADER_FONT);
         ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
