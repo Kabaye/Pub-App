@@ -4,15 +4,22 @@ import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
+import by.pub.storage.app.ui.dialog.RequestProviderDialog;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
 import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
-import org.springframework.stereotype.Component;
-
+import by.pub.storage.app.ui.table.IngredientRequestTable;
+import by.pub.storage.app.ui.table.IngredientTable;
+import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,10 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindow extends JFrame {
@@ -47,7 +51,7 @@ public class MainWindow extends JFrame {
     private final JTable ingredientTable;
     private final JTable ingredientRequestTable;
     private final TableModel ingredientTableModel;
-    private final TableModel ingredientRequestTableModel;
+    private final IngredientRequestTableModel ingredientRequestTableModel;
     private final JButton ingredientRequestButton;
     private final JButton fulfillButton;
 
@@ -63,7 +67,9 @@ public class MainWindow extends JFrame {
         mainPanel = new JPanel(new GridLayout(1, 2));
 
         ingredientRequestPanel = new JPanel(new BorderLayout());
-        ingredientRequestTableModel = new DefaultTableModel(INGREDIENT_REQUEST_TABLE_HEADER, 0);
+        ingredientRequestTableModel = new IngredientRequestTableModel(
+            ingredientRequestService.findAllIngredientRequests(), INGREDIENT_REQUEST_TABLE_HEADER,
+            0);
         ingredientRequestTable = new IngredientRequestTable(ingredientRequestTableModel);
         ingredientRequestScrollPane = new JScrollPane(ingredientRequestTable);
         fulfillButton = new JButton("Fulfill request");
@@ -84,13 +90,7 @@ public class MainWindow extends JFrame {
         setWindowPreferences();
 
         fullIngredientTable();
-        fullIngredientRequestTable();
-    }
-
-    private void fullIngredientRequestTable() {
-        for (IngredientRequest ingredientRequest : ingredientRequestService.findAllIngredientRequests()) {
-            addIngredientRequest(ingredientRequest);
-        }
+//        fullIngredientRequestTable();
     }
 
     private void fullIngredientTable() {
@@ -102,15 +102,17 @@ public class MainWindow extends JFrame {
     private void addListeners() {
         fulfillButton.addActionListener(e -> {
             ListSelectionModel selectionModel = ingredientRequestTable.getSelectionModel();
-            DefaultTableModel model = (DefaultTableModel) ingredientRequestTableModel;
-            Ingredient ingredient;
             int index = selectionModel.getMinSelectionIndex();
+            IngredientRequest ingredientRequest;
             if (index >= 0) {
-                ingredient = ingredientService
-                    .findIngredientByName((String) model.getValueAt(index, 1));
-                model.removeRow(index);
-                ingredient.setAmount(0L);
-                System.out.println(ingredient);
+                try {
+                    ingredientRequest = ingredientRequestService
+                        .acceptIngredientRequest(ingredientRequestTableModel.getValueAt(index));
+                } catch (RuntimeException exception) {
+                    JOptionPane
+                        .showConfirmDialog(MainWindow.this,
+                            exception.getMessage());
+                }
             }
         });
         ingredientRequestButton.addActionListener(e -> {
@@ -193,12 +195,6 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         pack();
-    }
-
-    public void addIngredientRequest(IngredientRequest ingredientRequest) {
-        ((DefaultTableModel) ingredientRequestTableModel).addRow(
-            new Object[]{ingredientRequest.getRequestId(), ingredientRequest.getIngredientName(),
-                ingredientRequest.getIngredientAmount(), ingredientRequest.getStatus()});
     }
 
     public void addIngredient(Ingredient ingredient) {

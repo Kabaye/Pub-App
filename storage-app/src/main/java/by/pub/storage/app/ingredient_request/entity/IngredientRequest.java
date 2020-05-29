@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class IngredientRequest {
 
     @Id
+    private String id;
     private String requestId;
     private String ingredientName;
     private Long ingredientAmount;

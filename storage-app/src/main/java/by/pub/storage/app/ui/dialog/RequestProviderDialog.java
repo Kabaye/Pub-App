@@ -1,4 +1,4 @@
-package by.pub.storage.app.ui;
+package by.pub.storage.app.ui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

@@ -1,11 +1,12 @@
-package by.pub.storage.app.ui;
+package by.pub.storage.app.ui.table;
 
+import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-public class IngredientTable extends JTable {
+public class IngredientRequestTable extends JTable {
 
-    public IngredientTable(TableModel dm) {
+    public IngredientRequestTable(TableModel dm) {
         super(dm);
     }
 
@@ -13,9 +14,12 @@ public class IngredientTable extends JTable {
     public Class getColumnClass(int column) {
         //return getValueAt(0,column).getClass();
         switch (column) {
-            case 1:
-                return Long.class;
             case 0:
+            case 2:
+                return Long.class;
+            case 3:
+                return IngredientRequestStatus.class;
+            case 1:
             default:
                 return String.class;
         }
