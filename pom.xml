@@ -58,6 +58,7 @@
 
     <modules>
         <module>storage-app</module>
+        <module>bar-app</module>
     </modules>
 
 </project>
