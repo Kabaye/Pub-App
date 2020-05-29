@@ -42,12 +42,12 @@ public class IngredientController {
     }
 
     @DeleteMapping("/{name}")
-    public void deleteIngredient(@PathVariable String name){
+    public void deleteIngredient(@PathVariable String name) {
         ingredientService.deleteIngredientByName(name);
     }
 
     @PostMapping("/order-ingredient/{name}")
-    public Ingredient orderIngredient(@PathVariable String name, @RequestParam Long amount){
+    public Ingredient orderIngredient(@PathVariable String name, @RequestParam Long amount) {
         return ingredientService.orderIngredient(name, amount);
     }
 
