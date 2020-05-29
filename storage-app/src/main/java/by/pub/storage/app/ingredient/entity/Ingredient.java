@@ -18,4 +18,9 @@ public class Ingredient {
     private String id;
     private String name;
     private Long amount;
+
+    public static Ingredient of(Ingredient ingredient) {
+        return new Ingredient().setAmount(ingredient.getAmount()).setName(ingredient.getName())
+            .setId(ingredient.getId());
+    }
 }
