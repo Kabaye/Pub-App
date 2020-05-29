@@ -77,6 +77,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         final Ingredient updatedIngredient = ingredientRepository.save(ingredient.setAmount(ingredient.getAmount() - amount));
         publisher.publishEvent(new IngredientChangedEvent(updatedIngredient));
-        return updatedIngredient;
+        return updatedIngredient.setAmount(amount);
     }
 }
