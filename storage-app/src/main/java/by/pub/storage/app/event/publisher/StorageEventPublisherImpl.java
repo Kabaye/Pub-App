@@ -1,5 +1,6 @@
 package by.pub.storage.app.event.publisher;
 
+import by.pub.storage.app.event.entity.StorageAppEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ public class StorageEventPublisherImpl implements StorageEventPublisher {
     }
 
     @Override
-    public void publishEvent(Object event) {
+    public void publishEvent(StorageAppEvent event) {
         publisher.publishEvent(event);
     }
 }
