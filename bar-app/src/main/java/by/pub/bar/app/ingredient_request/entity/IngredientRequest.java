@@ -1,5 +1,6 @@
 package by.pub.bar.app.ingredient_request.entity;
 
+import by.pub.bar.app.utils.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,5 @@ public class IngredientRequest {
     private String ingredientName;
     private Long ingredientAmount;
     @Transient
-    private IngredientRequestStatus status = IngredientRequestStatus.NOT_ACCEPTED;
+    private Status status = Status.NOT_ACCEPTED;
 }

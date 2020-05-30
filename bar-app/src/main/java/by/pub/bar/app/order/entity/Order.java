@@ -1,6 +1,7 @@
 package by.pub.bar.app.order.entity;
 
 import by.pub.bar.app.product.entity.Product;
+import by.pub.bar.app.utils.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,5 @@ public class Order {
     private List<Product> products;
     private String clientId;
     private Double totalPrice = 0D;
+    private Status status = Status.NOT_ACCEPTED;
 }
