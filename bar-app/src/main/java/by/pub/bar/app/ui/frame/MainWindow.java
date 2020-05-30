@@ -219,9 +219,7 @@ public class MainWindow extends JFrame {
                 order = orderTableModel.getValueAt(index);
                 if (order.getStatus().equals(Status.NOT_ACCEPTED)) {
                     try {
-                        // TODO: 5/30/20 make acceptOrder method
-//                        order=orderService.acceptOrder(order);
-                        orderService.deleteOrderById(order.getId());
+                        order = orderService.acceptOrder(order);
                         orderTableModel.removeRow(index);
                         orderTableModel.addRow(order);
                     } catch (RuntimeException exception) {
