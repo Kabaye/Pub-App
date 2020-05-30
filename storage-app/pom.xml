@@ -20,11 +20,6 @@
             <groupId>org.mockito</groupId>
             <version>3.3.3</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
     </dependencies>
 
     <version>1.0.0-SNAPSHOT</version>

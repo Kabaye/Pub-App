@@ -8,23 +8,12 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <artifactId>bar-app</artifactId>
+    <artifactId>client-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bar-app</name>
-    <description>Bar microservice</description>
-
-    <properties>
-        <java.version>14</java.version>
-    </properties>
+    <name>client-app</name>
+    <description>Client microservice</description>
 
     <dependencies>
 
-        <dependency>
-            <artifactId>storage-app</artifactId>
-            <groupId>by.pub</groupId>
-            <scope>compile</scope>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
-
 </project>
