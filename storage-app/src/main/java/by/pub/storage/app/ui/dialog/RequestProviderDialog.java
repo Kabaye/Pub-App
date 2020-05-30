@@ -113,6 +113,7 @@ public class RequestProviderDialog extends JDialog {
     }
 
     private void setWindowPreferences() {
+        setTitle("Storage: Ingredients handler");
         setContentPane(mainPanel);
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setResizable(false);

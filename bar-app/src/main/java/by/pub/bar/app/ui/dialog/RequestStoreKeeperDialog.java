@@ -103,6 +103,7 @@ public class RequestStoreKeeperDialog extends JDialog {
     }
 
     private void setWindowPreferences() {
+        setTitle("Bar: Ingredients handler");
         setContentPane(mainPanel);
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setResizable(false);

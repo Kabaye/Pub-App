@@ -15,9 +15,11 @@ import by.pub.storage.app.ui.table.IngredientRequestTable;
 import by.pub.storage.app.ui.table.IngredientTable;
 import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
 import by.pub.storage.app.ui.table_model.IngredientTableModel;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,11 +38,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.WindowEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindow extends JFrame {
@@ -302,6 +301,7 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
+        setTitle("Storage handler");
         showAuthPanel();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
