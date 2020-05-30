@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        return productRepository.save(processor.toDB(product));
+        return processor.fromDB(productRepository.save(processor.toDB(product)));
     }
 
     @Override
