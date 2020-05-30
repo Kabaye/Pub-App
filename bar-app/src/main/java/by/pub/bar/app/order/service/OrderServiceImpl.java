@@ -8,7 +8,7 @@ import by.pub.bar.app.order.repository.OrderRepository;
 import by.pub.bar.app.order.utils.OrderDBProcessor;
 import by.pub.bar.app.product.service.ProductService;
 import by.pub.bar.app.utils.Status;
-import by.pub.bar.app.websocket.server.message_sender.OrderWebSocketMessageSender;
+import by.pub.bar.app.web.web_client.WebClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,15 +21,15 @@ public class OrderServiceImpl implements OrderService {
     private final ProductService productService;
     private final IngredientService ingredientService;
     private final OrderDBProcessor processor;
-    private final OrderWebSocketMessageSender orderWebSocketMessageSender;
+    private final WebClient webClient;
     private final BarEventPublisher publisher;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ProductService productService, IngredientService ingredientService, OrderDBProcessor processor, OrderWebSocketMessageSender orderWebSocketMessageSender, BarEventPublisher publisher) {
+    public OrderServiceImpl(OrderRepository orderRepository, ProductService productService, IngredientService ingredientService, OrderDBProcessor processor, WebClient webClient, BarEventPublisher publisher) {
         this.orderRepository = orderRepository;
         this.productService = productService;
         this.ingredientService = ingredientService;
         this.processor = processor;
-        this.orderWebSocketMessageSender = orderWebSocketMessageSender;
+        this.webClient = webClient;
         this.publisher = publisher;
     }
 
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
                 .flatMap(product -> product.getUsedIngredients().stream())
                 .forEach(ingredientService::takeIngredientFromBarStand);
 
-        orderWebSocketMessageSender.sendAcceptedOrder(order.setStatus(Status.ACCEPTED));
+        webClient.sendAcceptedOrder(order.setStatus(Status.ACCEPTED));
         deleteOrderById(order.getId());
         return order;
     }

@@ -3,7 +3,7 @@ package by.pub.bar.app.ingredient_request.service;
 import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;
 import by.pub.bar.app.ingredient_request.repository.IngredientRequestRepository;
-import by.pub.bar.app.websocket.storage_client.event.entity.SendIngredientRequestEvent;
+import by.pub.bar.app.web.storage_client.event.entity.SendIngredientRequestEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

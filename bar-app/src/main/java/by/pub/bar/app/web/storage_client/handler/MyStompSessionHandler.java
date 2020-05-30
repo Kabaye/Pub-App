@@ -1,8 +1,8 @@
-package by.pub.bar.app.websocket.storage_client.handler;
+package by.pub.bar.app.web.storage_client.handler;
 
 import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;
-import by.pub.bar.app.websocket.storage_client.event.entity.ReceiveAcceptedIngredientRequestEvent;
+import by.pub.bar.app.web.storage_client.event.entity.ReceiveAcceptedIngredientRequestEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompCommand;

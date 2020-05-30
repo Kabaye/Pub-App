@@ -1,4 +1,4 @@
-package by.pub.bar.app.websocket.storage_client.config;
+package by.pub.bar.app.web.storage_client.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

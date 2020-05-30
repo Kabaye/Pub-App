@@ -1,11 +1,11 @@
-package by.pub.bar.app.websocket.storage_client.event.listener;
+package by.pub.bar.app.web.storage_client.event.listener;
 
 import by.pub.bar.app.ingredient.entity.Ingredient;
 import by.pub.bar.app.ingredient.service.IngredientService;
 import by.pub.bar.app.ingredient_request.service.IngredientRequestService;
-import by.pub.bar.app.websocket.storage_client.event.entity.ReceiveAcceptedIngredientRequestEvent;
-import by.pub.bar.app.websocket.storage_client.event.entity.SendIngredientRequestEvent;
-import by.pub.bar.app.websocket.storage_client.handler.MyStompSessionHandler;
+import by.pub.bar.app.web.storage_client.event.entity.ReceiveAcceptedIngredientRequestEvent;
+import by.pub.bar.app.web.storage_client.event.entity.SendIngredientRequestEvent;
+import by.pub.bar.app.web.storage_client.handler.MyStompSessionHandler;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
