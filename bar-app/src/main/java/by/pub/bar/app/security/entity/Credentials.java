@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Document(collection = "bat_credentials")
+@Document(collection = "bar_credentials")
 public class Credentials {
 
     @Id
