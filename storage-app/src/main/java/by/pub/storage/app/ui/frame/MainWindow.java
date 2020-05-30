@@ -1,4 +1,4 @@
-package by.pub.storage.app.ui;
+package by.pub.storage.app.ui.frame;
 
 import by.pub.storage.app.event.entity.IngredientChangedEvent;
 import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
@@ -26,6 +26,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -73,6 +76,12 @@ public class MainWindow extends JFrame {
     private final CredentialsService credentialsService;
     private final RequestProviderDialog requestProviderDialog;
 
+    private final JMenuBar menuBar;
+    private final JMenu userMenu;
+    private final JMenu requestMenu;
+    private final JMenuItem signOutItem;
+    private final JMenuItem clearRequestItem;
+
     public MainWindow(
         IngredientTableModel ingredientTableModel,
         IngredientRequestTableModel ingredientRequestTableModel,
@@ -94,7 +103,7 @@ public class MainWindow extends JFrame {
         passwordTextField = new JPasswordField();
         logInButton = new JButton("Log in");
         exitButton = new JButton("Exit");
-        passwordCheckBox = new JCheckBox("Show password", false);
+        passwordCheckBox = new JCheckBox("Show pass", false);
         addComponentsToAuthPanel();
         configureAuthPanelComponents();
         //mainPanel
@@ -111,14 +120,37 @@ public class MainWindow extends JFrame {
         ingredientScrollPane = new JScrollPane(ingredientTable);
         ingredientRequestButton = new JButton("Request ingredients");
         ingredientLabel = new JLabel("Available ingredients");
+        //menu
+        signOutItem = new JMenuItem("Sign out");
+        clearRequestItem = new JMenuItem("Clear accepted requests");
+        menuBar = new JMenuBar();
+        userMenu = new JMenu("User");
+        requestMenu = new JMenu("Ingredient Requests");
 
         loadDataToModels();
         addListeners();
+        addMenuListeners();
         addComponentsToIngredientPanel();
         addComponentsToIngredientRequestPanel();
         addComponentsToMainPanel();
         configureComponents();
+        configureMenu();
         setWindowPreferences();
+    }
+
+    private void addMenuListeners() {
+        signOutItem.addActionListener(e -> showAuthPanel());
+        clearRequestItem.addActionListener(e -> ingredientRequestTableModel.removeAcceptedRows());
+    }
+
+    private void configureMenu() {
+        userMenu.add(signOutItem);
+        requestMenu.add(clearRequestItem);
+        menuBar.add(userMenu);
+        menuBar.add(requestMenu);
+        setJMenuBar(menuBar);
+
+        menuBar.setVisible(false);
     }
 
     private void loadDataToModels() {
@@ -163,13 +195,7 @@ public class MainWindow extends JFrame {
             if (credentialsService
                 .checkCredentials(usernameTextField.getText(),
                     new String(passwordTextField.getPassword()))) {
-                JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
-                contentPane.removeAll();
-                contentPane.setLayout(new BorderLayout());
-                contentPane.add(mainPanel, BorderLayout.CENTER);
-                contentPane.revalidate();
-                contentPane.repaint();
-                MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                showMainPanel();
             } else {
                 JOptionPane
                     .showMessageDialog(MainWindow.this,
@@ -276,12 +302,34 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
-        setContentPane(authPanel);
-        setBounds(0, 0, SCREEN_WIDTH / 10, SCREEN_HEIGHT / 20);
-//        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        showAuthPanel();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        pack();
+//        pack();
+    }
+
+    private void showAuthPanel() {
+        JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
+        contentPane.removeAll();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(authPanel, BorderLayout.CENTER);
+        contentPane.revalidate();
+        contentPane.repaint();
+
+        menuBar.setVisible(false);
+        setBounds(0, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 5);
+    }
+
+    private void showMainPanel() {
+        JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
+        contentPane.removeAll();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(mainPanel, BorderLayout.CENTER);
+        contentPane.revalidate();
+        contentPane.repaint();
+
+        menuBar.setVisible(true);
+        MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     @EventListener

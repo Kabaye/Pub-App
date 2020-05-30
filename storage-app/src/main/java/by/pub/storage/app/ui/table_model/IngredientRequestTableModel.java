@@ -1,6 +1,7 @@
 package by.pub.storage.app.ui.table_model;
 
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +25,15 @@ public class IngredientRequestTableModel extends DefaultTableModel {
             new Object[]{ingredientRequest.getRequestId(), ingredientRequest.getIngredientName(),
                 ingredientRequest.getIngredientAmount(), ingredientRequest.getStatus()});
         ingredientRequests.add(ingredientRequest);
+    }
+
+    public void removeAcceptedRows() {
+        for (int i = 0; i < ingredientRequests.size(); i++) {
+            if (ingredientRequests.get(i).getStatus().equals(IngredientRequestStatus.ACCEPTED)) {
+                removeRow(i);
+                i--;
+            }
+        }
     }
 
     @Override

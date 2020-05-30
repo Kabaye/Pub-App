@@ -1,12 +1,11 @@
 package by.pub.storage.app;
 
-import by.pub.storage.app.ui.MainWindow;
+import by.pub.storage.app.ui.frame.MainWindow;
+import java.awt.EventQueue;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-
-import java.awt.EventQueue;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
