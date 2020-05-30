@@ -69,7 +69,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
             try {
                 stompSession = future.get();
             } catch (InterruptedException | ExecutionException exc) {
-                LOGGER.error("Cannot connect to storage app 2", exc);
+                LOGGER.error("Cannot connect to storage app", exc);
             }
 
         };

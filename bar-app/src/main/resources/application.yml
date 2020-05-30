@@ -1,2 +1,8 @@
 server:
   port: 9891
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://${USER}:${PASSWORD}@kabayedb-gw5zw.gcp.mongodb.net/?retryWrites=true&w=majority
+      database: bar-app
