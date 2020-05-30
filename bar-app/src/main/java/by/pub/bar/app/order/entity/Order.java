@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Data
@@ -26,9 +25,4 @@ public class Order {
     private Double totalPrice = 0D;
     @Transient
     private Status status = Status.NOT_ACCEPTED;
-
-    @PostConstruct
-    private void init() {
-        products.forEach(product -> totalPrice += product.getPrice());
-    }
 }

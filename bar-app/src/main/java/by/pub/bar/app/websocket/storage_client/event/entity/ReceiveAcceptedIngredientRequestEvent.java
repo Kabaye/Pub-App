@@ -1,4 +1,4 @@
-package by.pub.bar.app.websocket.event.entity;
+package by.pub.bar.app.websocket.storage_client.event.entity;
 
 import by.pub.bar.app.event.entity.BarAppEvent;
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;

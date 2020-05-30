@@ -13,4 +13,6 @@ public interface OrderService {
     Order saveOrder(Order Order);
 
     void deleteOrderById(String id);
+
+    Order acceptOrder(String id);
 }

@@ -1,4 +1,4 @@
-package by.pub.bar.app.websocket.config;
+package by.pub.bar.app.websocket.storage_client.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 @Configuration
-public class WebSocketConfig {
+public class WebSocketClientConfig {
     @Bean
     public WebSocketStompClient webSocketStompClient() {
         WebSocketStompClient webSocketStompClient = new WebSocketStompClient(new StandardWebSocketClient());

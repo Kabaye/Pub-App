@@ -1,4 +1,4 @@
-package by.pub.bar.app.order.util;
+package by.pub.bar.app.order.utils;
 
 import by.pub.bar.app.order.entity.Order;
 import org.springframework.stereotype.Component;
@@ -12,5 +12,10 @@ public class OrderDBProcessor {
 
     public Order fromDB(Order Order) {
         return Order.setTotalPrice((long) (Order.getTotalPrice() / 10) / 100D);
+    }
+
+    public Order preprocessTotalPrice(Order order) {
+        order.getProducts().forEach(product -> order.setTotalPrice(order.getTotalPrice() + product.getPrice()));
+        return order;
     }
 }
