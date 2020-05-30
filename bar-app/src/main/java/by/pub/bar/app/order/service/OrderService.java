@@ -14,5 +14,5 @@ public interface OrderService {
 
     void deleteOrderById(String id);
 
-    Order acceptOrder(String id);
+    Order acceptOrder(Order order);
 }

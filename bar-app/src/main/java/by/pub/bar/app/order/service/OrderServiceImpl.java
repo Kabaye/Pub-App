@@ -53,10 +53,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order acceptOrder(String id) {
-        Order order = findById(id);
+    public Order acceptOrder(Order order) {
+        //TODO 30.05.2020 validate order
         orderWebSocketMessageSender.sendAcceptedOrder(order.setStatus(Status.ACCEPTED));
-        orderRepository.deleteById(id);
+        deleteOrderById(order.getId());
         return order;
     }
 }

@@ -47,6 +47,7 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
         ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
         ingredientRequestWebSocketMessageSender.sendAcceptedIngredientRequest(ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED));
+        deleteByRequestId(ingredientRequest.getRequestId());
         return ingredientRequest;
     }
 
