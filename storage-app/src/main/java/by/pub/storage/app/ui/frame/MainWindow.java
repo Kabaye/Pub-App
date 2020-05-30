@@ -45,7 +45,7 @@ import org.springframework.stereotype.Component;
 public class MainWindow extends JFrame {
 
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
-    private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 25);
+    private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 20);
     private static final int SCREEN_WIDTH = 1000;
     private static final int SCREEN_HEIGHT = 600;
 
@@ -140,7 +140,13 @@ public class MainWindow extends JFrame {
 
     private void addMenuListeners() {
         signOutItem.addActionListener(e -> showAuthPanel());
-        clearRequestItem.addActionListener(e -> ingredientRequestTableModel.removeAcceptedRows());
+        clearRequestItem.addActionListener(e -> {
+            if (ingredientRequestTableModel.removeAcceptedRows() == 0) {
+                JOptionPane
+                    .showMessageDialog(MainWindow.this,
+                        "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        });
     }
 
     private void configureMenu() {
@@ -183,7 +189,6 @@ public class MainWindow extends JFrame {
     }
 
     private void addListeners() {
-        // TODO: 5/30/20 add sign out ability
         passwordCheckBox.addActionListener(e -> {
             if (passwordCheckBox.isSelected()) {
                 passwordTextField.setEchoChar((char) 0);
@@ -199,7 +204,7 @@ public class MainWindow extends JFrame {
             } else {
                 JOptionPane
                     .showMessageDialog(MainWindow.this,
-                        "Invalid login and password");
+                        "Invalid login and password", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
         exitButton.addActionListener(e -> MainWindow.this
@@ -221,12 +226,12 @@ public class MainWindow extends JFrame {
                     } catch (RuntimeException exception) {
                         JOptionPane
                             .showMessageDialog(MainWindow.this,
-                                exception.getMessage());
+                                exception.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
                     }
                 } else {
                     JOptionPane
                         .showMessageDialog(MainWindow.this,
-                            "Request is already accepted");
+                            "Request is already accepted", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });

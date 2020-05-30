@@ -27,13 +27,16 @@ public class IngredientRequestTableModel extends DefaultTableModel {
         ingredientRequests.add(ingredientRequest);
     }
 
-    public void removeAcceptedRows() {
+    public int removeAcceptedRows() {
+        int counter = 0;
         for (int i = 0; i < ingredientRequests.size(); i++) {
             if (ingredientRequests.get(i).getStatus().equals(IngredientRequestStatus.ACCEPTED)) {
                 removeRow(i);
                 i--;
+                counter++;
             }
         }
+        return counter;
     }
 
     @Override
