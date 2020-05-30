@@ -1,6 +1,6 @@
 package by.pub.bar.app.ui.dialog;
 
-import by.pub.bar.app.ingredient.service.IngredientService;
+import by.pub.bar.app.ingredient_request.service.IngredientRequestService;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -33,14 +34,14 @@ public class RequestStoreKeeperDialog extends JDialog {
     private final JButton requestButton;
     private final JButton cancelButton;
 
-    private final IngredientService ingredientService;
+    private final IngredientRequestService ingredientRequestService;
     private final IngredientTableModel ingredientTableModel;
 
     public RequestStoreKeeperDialog(
-        IngredientService ingredientService,
+        IngredientRequestService ingredientRequestService,
         IngredientTableModel ingredientTableModel) {
         super((JFrame) null, "Request for ingredients");
-        this.ingredientService = ingredientService;
+        this.ingredientRequestService = ingredientRequestService;
         this.ingredientTableModel = ingredientTableModel;
 
         mainPanel = new JPanel(new BorderLayout());
@@ -63,23 +64,14 @@ public class RequestStoreKeeperDialog extends JDialog {
 
     private void addListeners() {
         requestButton.addActionListener(e -> {
-//            try {
-//                String name = nameTextField.getText();
-//                Long amount = Long.parseLong(amountTextField.getText());
-//                Ingredient ingredient;
-//                try {
-//                    ingredient = ingredientService.orderIngredient(name, amount);
-//                } catch (RuntimeException exception) {
-//                    ingredient = ingredientService
-//                        .saveIngredient(new Ingredient().setName(name).setAmount(amount));
-//                }
-//                ingredientTableModel.removeRow(ingredient);
-//                ingredientTableModel.addRow(ingredient);
-//            } catch (Exception exception) {
-//                JOptionPane
-//                    .showMessageDialog(RequestProviderDialog.this,
-//                        exception.getMessage());
-//            }
+            try {
+                String name = nameTextField.getText();
+                Long amount = Long.parseLong(amountTextField.getText());
+                ingredientRequestService.createAndSendIngredientRequest(name, amount);
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(RequestStoreKeeperDialog.this,
+                    exception.getMessage());
+            }
         });
         cancelButton.addActionListener(e -> setVisible(false));
     }
