@@ -1,16 +1,26 @@
 package by.pub.bar.app.ui.frame;
 
+import by.pub.bar.app.ingredient.entity.Ingredient;
 import by.pub.bar.app.ingredient.service.IngredientService;
 import by.pub.bar.app.order.entity.Order;
 import by.pub.bar.app.order.service.OrderService;
 import by.pub.bar.app.security.service.CredentialsService;
+import by.pub.bar.app.ui.dialog.OrderInfoDialog;
 import by.pub.bar.app.ui.dialog.RequestStoreKeeperDialog;
+import by.pub.bar.app.ui.renderer.IngredientTextRenderer;
+import by.pub.bar.app.ui.renderer.OrderStatusRenderer;
+import by.pub.bar.app.ui.table.IngredientTable;
+import by.pub.bar.app.ui.table.OrderTable;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
 import by.pub.bar.app.ui.table_model.OrderTableModel;
+import by.pub.bar.app.utils.Status;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -101,14 +111,13 @@ public class MainWindow extends JFrame {
         mainPanel = new JPanel(new GridLayout(1, 2));
         orderPanel = new JPanel(new BorderLayout());
 
-        orderTable = new JTable(this.orderTableModel);//new OrderTable(this.orderTableModel);
+        orderTable = new OrderTable(this.orderTableModel);
         orderScrollPane = new JScrollPane(orderTable);
         fulfillButton = new JButton("Fulfill order");
         orderLabel = new JLabel("Requests from clients");
 
         ingredientPanel = new JPanel(new BorderLayout());
-        ingredientTable = new JTable(
-            this.ingredientTableModel);//new IngredientTable(this.ingredientTableModel);
+        ingredientTable = new IngredientTable(this.ingredientTableModel);
         ingredientScrollPane = new JScrollPane(ingredientTable);
         ingredientRequestButton = new JButton("Request ingredients");
         ingredientLabel = new JLabel("Available ingredients");
@@ -152,12 +161,12 @@ public class MainWindow extends JFrame {
     }
 
     private void loadDataToModels() {
-//        for (Order order : orderService.findAllOrders()) {
-//            orderTableModel.addRow(order);
-//        }
-//        for (Ingredient ingredient : ingredientService.findAllIngredients()) {
-//            ingredientTableModel.addRow(ingredient);
-//        }
+        for (Order order : orderService.findAllOrders()) {
+            orderTableModel.addRow(order);
+        }
+        for (Ingredient ingredient : ingredientService.findAllIngredients()) {
+            ingredientTableModel.addRow(ingredient);
+        }
     }
 
     private void addComponentsToAuthPanel() {
@@ -205,28 +214,53 @@ public class MainWindow extends JFrame {
             int index = selectionModel.getMinSelectionIndex();
             Order order;
             if (index >= 0) {
-//                ingredientRequest = orderTableModel.getValueAt(index);
-//                if (ingredientRequest.getStatus().equals(IngredientRequestStatus.NOT_ACCEPTED)) {
-//                    try {
-//                        ingredientRequest = ingredientRequestService
-//                            .acceptIngredientRequest(ingredientRequest);
-//                        ingredientRequestService
-//                            .deleteByRequestId(ingredientRequest.getRequestId());
-//                        orderTableModel.removeRow(index);
-//                        orderTableModel.addRow(ingredientRequest);
-//                    } catch (RuntimeException exception) {
-//                        JOptionPane
-//                            .showMessageDialog(MainWindow.this,
-//                                exception.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
-//                    }
-//                } else {
-//                    JOptionPane
-//                        .showMessageDialog(MainWindow.this,
-//                            "Request is already accepted", "Warning", JOptionPane.WARNING_MESSAGE);
-//                }
+                order = orderTableModel.getValueAt(index);
+                if (order.getStatus().equals(Status.NOT_ACCEPTED)) {
+                    try {
+                        // TODO: 5/30/20 make acceptOrder method
+//                        order=orderService.acceptOrder(order);
+                        orderService.deleteOrderById(order.getId());
+                        orderTableModel.removeRow(index);
+                        orderTableModel.addRow(order);
+                    } catch (RuntimeException exception) {
+                        JOptionPane
+                            .showMessageDialog(MainWindow.this,
+                                exception.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane
+                        .showMessageDialog(MainWindow.this,
+                            "Order is already accepted", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
         ingredientRequestButton.addActionListener(e -> requestStoreKeeperDialog.setVisible(true));
+//        orderTable.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (e.getClickCount() == 2) {
+//                    System.out.println(" double click");
+//                }
+//            }
+//        });
+//        orderTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//            public void valueChanged(ListSelectionEvent e) {
+//                System.out.println("FUCK");
+//            }
+//        });
+        orderTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    OrderInfoDialog infoDialog = new OrderInfoDialog(
+                        orderTableModel.getValueAt(row));
+                    infoDialog.setVisible(true);
+                }
+            }
+        });
     }
 
     private void addComponentsToIngredientPanel() {
@@ -267,20 +301,20 @@ public class MainWindow extends JFrame {
     }
 
     private void configureTables() {
-//        ingredientTable.setFillsViewportHeight(true);
-//        for (int i = 0; i < ingredientTable.getColumnCount(); i++) {
-//            ingredientTable.getColumnModel().getColumn(i)
-//                .setCellRenderer(new IngredientTextRenderer());
-//        }
-//        orderTable.setFillsViewportHeight(true);
-//        for (int i = 0; i < orderTable.getColumnCount() - 1; i++) {
-//            orderTable.getColumnModel().getColumn(i)
-//                .setCellRenderer(new OrderTextRenderer());
-//        }
-//        orderTable.getColumnModel()
-//            .getColumn(orderTable.getColumnCount() - 1)
-//            .setCellRenderer(new OrderStatusRenderer());
-//        orderTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        ingredientTable.setFillsViewportHeight(true);
+        for (int i = 0; i < ingredientTable.getColumnCount(); i++) {
+            ingredientTable.getColumnModel().getColumn(i)
+                .setCellRenderer(new IngredientTextRenderer());
+        }
+        orderTable.setFillsViewportHeight(true);
+        for (int i = 0; i < orderTable.getColumnCount() - 1; i++) {
+            orderTable.getColumnModel().getColumn(i)
+                .setCellRenderer(new IngredientTextRenderer());
+        }
+        orderTable.getColumnModel()
+            .getColumn(orderTable.getColumnCount() - 1)
+            .setCellRenderer(new OrderStatusRenderer());
+        orderTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void configureScrollPanes() {
