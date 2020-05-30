@@ -46,9 +46,9 @@ public class IngredientController {
         ingredientService.deleteIngredientByName(name);
     }
 
-    @PostMapping("/order-ingredient/{name}")
+    @PostMapping("/take-ingredient-from-bar-stand/{name}")
     public Ingredient orderIngredient(@PathVariable String name, @RequestParam Long amount) {
-        return ingredientService.orderIngredientFromStorage(name, amount);
+        return ingredientService.takeIngredientsFromBarStand(name, amount);
     }
 
 }
