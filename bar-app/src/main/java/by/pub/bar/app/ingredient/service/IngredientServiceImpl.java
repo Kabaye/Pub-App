@@ -46,7 +46,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient takeIngredientsFromBarStand(Ingredient ingredient) {
+    public Ingredient takeIngredientFromBarStand(Ingredient ingredient) {
         Ingredient ingredientInStand = findIngredientByName(ingredient.getName());
 
         if (ingredient.getAmount() > ingredientInStand.getAmount()) {
@@ -69,5 +69,12 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientRepository.findAmountOfIngredientByName(ingredient.getName())
                 .orElseThrow(() -> new RuntimeException("There is no ingredient with name: " + ingredient.getName()))
                 .getAmount() >= ingredient.getAmount();
+    }
+
+    @Override
+    public Ingredient putIngredientOnBarStand(Ingredient ingredient) {
+        Ingredient foundIngredient = findIngredientByName(ingredient.getName());
+        foundIngredient.setAmount(ingredient.getAmount() + foundIngredient.getAmount());
+        return foundIngredient;
     }
 }

@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.getProducts().stream()
                 .flatMap(product -> product.getUsedIngredients().stream())
-                .forEach(ingredientService::takeIngredientsFromBarStand);
+                .forEach(ingredientService::takeIngredientFromBarStand);
 
         orderWebSocketMessageSender.sendAcceptedOrder(order.setStatus(Status.ACCEPTED));
         deleteOrderById(order.getId());
