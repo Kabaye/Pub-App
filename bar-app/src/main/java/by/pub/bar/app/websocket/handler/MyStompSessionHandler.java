@@ -1,6 +1,7 @@
 package by.pub.bar.app.websocket.handler;
 
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;
+import by.pub.bar.app.ingredient_request.service.IngredientRequestService;
 import by.pub.bar.app.websocket.client.CustomWebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,14 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
     private final String websocketHandshakeURL;
     private final WebSocketStompClient webSocketStompClient;
+    private final IngredientRequestService ingredientRequestService;
 
     private volatile StompSession stompSession;
 
-    protected MyStompSessionHandler(String websocketHandshakeURL, WebSocketStompClient webSocketStompClient) {
+    protected MyStompSessionHandler(String websocketHandshakeURL, WebSocketStompClient webSocketStompClient, IngredientRequestService ingredientRequestService) {
         this.websocketHandshakeURL = websocketHandshakeURL;
         this.webSocketStompClient = webSocketStompClient;
+        this.ingredientRequestService = ingredientRequestService;
 
         try {
             stompSession = this.webSocketStompClient.connect(this.websocketHandshakeURL, this).get();
@@ -48,16 +51,14 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         LOGGER.error("Received error on socket channel with session id: " + session.getSessionId(), exception);
     }
 
-    //TODO 30.05.2020 check this
     @Override
     public Type getPayloadType(StompHeaders headers) {
         return IngredientRequest.class;
     }
 
-    //TODO 30.05.2020 Use service here
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
-        IngredientRequest msg = (IngredientRequest) payload;
+        ingredientRequestService.acceptIngredientRequest((IngredientRequest) payload);
     }
 
     @Override
@@ -74,9 +75,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
         };
 
-        service.schedule(runnable, 5_000, TimeUnit.MILLISECONDS);
-
-//        service.awaitTermination();
+        service.schedule(runnable, 10_000, TimeUnit.MILLISECONDS);
     }
 
     public void sendData(String destination, Object payload) {

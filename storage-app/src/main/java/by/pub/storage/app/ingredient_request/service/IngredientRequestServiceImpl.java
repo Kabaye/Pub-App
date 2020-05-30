@@ -6,7 +6,7 @@ import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
 import by.pub.storage.app.ingredient_request.repository.IngredientRequestRepository;
-import by.pub.storage.app.websocket.web_client.IngredientRequestWebClient;
+import by.pub.storage.app.websocket.web_client.IngredientRequestWebSocketClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
 public class IngredientRequestServiceImpl implements IngredientRequestService {
     private final IngredientRequestRepository ingredientRequestRepository;
     private final IngredientService ingredientService;
-    private final IngredientRequestWebClient ingredientRequestWebClient;
+    private final IngredientRequestWebSocketClient ingredientRequestWebSocketClient;
     private final StorageEventPublisher publisher;
 
-    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository, IngredientService ingredientService, IngredientRequestWebClient ingredientRequestWebClient, StorageEventPublisher publisher) {
+    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository, IngredientService ingredientService, IngredientRequestWebSocketClient ingredientRequestWebSocketClient, StorageEventPublisher publisher) {
         this.ingredientRequestRepository = ingredientRequestRepository;
         this.ingredientService = ingredientService;
-        this.ingredientRequestWebClient = ingredientRequestWebClient;
+        this.ingredientRequestWebSocketClient = ingredientRequestWebSocketClient;
         this.publisher = publisher;
     }
 
@@ -46,8 +46,8 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     @Override
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
         ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
-        ingredientRequestWebClient.acceptIngredientRequest(ingredientRequest);
-        return ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED);
+        ingredientRequestWebSocketClient.acceptIngredientRequest(ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED));
+        return ingredientRequest;
     }
 
     @Override

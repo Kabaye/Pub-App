@@ -5,10 +5,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IngredientRequestWebClientImpl implements IngredientRequestWebClient {
+public class IngredientRequestWebSocketClientImpl implements IngredientRequestWebSocketClient {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public IngredientRequestWebClientImpl(SimpMessagingTemplate simpMessagingTemplate) {
+    public IngredientRequestWebSocketClientImpl(SimpMessagingTemplate simpMessagingTemplate) {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 

@@ -50,4 +50,9 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
 
         webSocketClient.requestIngredient(ingredientRequest);
     }
+
+    @Override
+    public void acceptIngredientRequest(IngredientRequest ingredientRequest) {
+        ingredientRequestRepository.deleteByRequestId(ingredientRequest.getRequestId());
+    }
 }
