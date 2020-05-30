@@ -2,6 +2,7 @@ package by.pub.storage.app.ui.dialog;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient.service.IngredientService;
+import by.pub.storage.app.ui.table_model.IngredientTableModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -35,11 +36,14 @@ public class RequestProviderDialog extends JDialog {
     private final JButton cancelButton;
 
     private final IngredientService ingredientService;
+    private final IngredientTableModel ingredientTableModel;
 
     public RequestProviderDialog(
-        IngredientService ingredientService) {
+        IngredientService ingredientService,
+        IngredientTableModel ingredientTableModel) {
         super((JFrame) null, "Request for ingredients");
         this.ingredientService = ingredientService;
+        this.ingredientTableModel = ingredientTableModel;
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -64,12 +68,15 @@ public class RequestProviderDialog extends JDialog {
             try {
                 String name = nameTextField.getText();
                 Long amount = Long.parseLong(amountTextField.getText());
+                Ingredient ingredient;
                 try {
-                    ingredientService.orderIngredient(name, amount);
+                    ingredient = ingredientService.orderIngredient(name, amount);
                 } catch (RuntimeException exception) {
-                    ingredientService
+                    ingredient = ingredientService
                         .saveIngredient(new Ingredient().setName(name).setAmount(amount));
                 }
+                ingredientTableModel.removeRow(ingredient);
+                ingredientTableModel.addRow(ingredient);
             } catch (Exception exception) {
                 JOptionPane
                     .showMessageDialog(RequestProviderDialog.this,

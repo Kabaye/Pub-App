@@ -1,22 +1,21 @@
 package by.pub.storage.app.ui.table_model;
 
 import by.pub.storage.app.ingredient.entity.Ingredient;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IngredientTableModel extends DefaultTableModel {
 
-    List<Ingredient> ingredients;
+    private static final Object[] INGREDIENT_TABLE_HEADER = new String[]{"Name", "Amount"};
 
-    public IngredientTableModel(List<Ingredient> list, Object[] columnNames,
-        int rowCount) {
-        super(columnNames, rowCount);
-        ingredients = list;
-        for (Ingredient ingredientRequest : list) {
-            addRow(new Object[]{
-                ingredientRequest.getName(),
-                ingredientRequest.getAmount()});
-        }
+    private List<Ingredient> ingredients;
+
+    public IngredientTableModel() {
+        super(INGREDIENT_TABLE_HEADER, 0);
+        ingredients = new ArrayList<>();
     }
 
     public void addRow(Ingredient ingredient) {
@@ -38,10 +37,6 @@ public class IngredientTableModel extends DefaultTableModel {
         if (index >= 0) {
             removeRow(index);
         }
-    }
-
-    public Ingredient getValueAt(int rowIndex) {
-        return ingredients.get(rowIndex);
     }
 
     private int getIndexByName(String name) {

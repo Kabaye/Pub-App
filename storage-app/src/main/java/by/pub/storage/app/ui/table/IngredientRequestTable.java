@@ -12,7 +12,6 @@ public class IngredientRequestTable extends JTable {
 
     @Override
     public Class getColumnClass(int column) {
-        //return getValueAt(0,column).getClass();
         switch (column) {
             case 0:
             case 2:

@@ -11,7 +11,6 @@ public class IngredientTable extends JTable {
 
     @Override
     public Class getColumnClass(int column) {
-        //return getValueAt(0,column).getClass();
         switch (column) {
             case 1:
                 return Long.class;
