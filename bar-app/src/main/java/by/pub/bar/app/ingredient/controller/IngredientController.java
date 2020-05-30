@@ -47,7 +47,7 @@ public class IngredientController {
     }
 
     @PostMapping("/take-ingredient-from-bar-stand/{name}")
-    public Ingredient orderIngredient(@PathVariable String name, @RequestParam Long amount) {
+    public Ingredient takeIngredientFromBarStand(@PathVariable String name, @RequestParam Long amount) {
         return ingredientService.takeIngredientsFromBarStand(name, amount);
     }
 
