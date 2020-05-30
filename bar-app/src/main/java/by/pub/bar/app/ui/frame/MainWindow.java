@@ -1,6 +1,7 @@
 package by.pub.bar.app.ui.frame;
 
 import by.pub.bar.app.event.entity.IngredientChangedEvent;
+import by.pub.bar.app.event.entity.NewOrderSavedEvent;
 import by.pub.bar.app.ingredient.entity.Ingredient;
 import by.pub.bar.app.ingredient.service.IngredientService;
 import by.pub.bar.app.order.entity.Order;
@@ -235,20 +236,6 @@ public class MainWindow extends JFrame {
             }
         });
         ingredientRequestButton.addActionListener(e -> requestStoreKeeperDialog.setVisible(true));
-//        orderTable.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                if (e.getClickCount() == 2) {
-//                    System.out.println(" double click");
-//                }
-//            }
-//        });
-//        orderTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//                System.out.println("FUCK");
-//            }
-//        });
         orderTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table = (JTable) mouseEvent.getSource();
@@ -363,11 +350,11 @@ public class MainWindow extends JFrame {
         MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    //    @EventListener
-//    public void handleIngredientRequesting(NewIngredientRequestEvent event) {
-//        orderTableModel.addRow(event.getIngredientRequest());
-//    }
-//
+    @EventListener
+    public void handleOrderSaving(NewOrderSavedEvent event) {
+        orderTableModel.addRow(event.getOrder());
+    }
+
     @EventListener
     public void handleIngredientChanging(IngredientChangedEvent event) {
         ingredientTableModel.removeRow(event.getIngredient());
