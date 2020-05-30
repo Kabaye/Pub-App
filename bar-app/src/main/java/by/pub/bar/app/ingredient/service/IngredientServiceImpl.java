@@ -4,9 +4,9 @@ import by.pub.bar.app.event.entity.IngredientChangedEvent;
 import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.ingredient.entity.Ingredient;
 import by.pub.bar.app.ingredient.repository.IngredientRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -73,8 +73,16 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient putIngredientOnBarStand(Ingredient ingredient) {
-        Ingredient foundIngredient = findIngredientByName(ingredient.getName());
+        Optional<Ingredient> foundIngredientOpt = ingredientRepository
+            .findByName(ingredient.getName());
+        if (foundIngredientOpt.isEmpty()) {
+            Ingredient savedIngredient = saveIngredient(ingredient);
+            publisher.publishEvent(new IngredientChangedEvent(savedIngredient));
+            return savedIngredient;
+        }
+        Ingredient foundIngredient = foundIngredientOpt.get();
         foundIngredient.setAmount(ingredient.getAmount() + foundIngredient.getAmount());
+        publisher.publishEvent(new IngredientChangedEvent(foundIngredient));
         return foundIngredient;
     }
 }
