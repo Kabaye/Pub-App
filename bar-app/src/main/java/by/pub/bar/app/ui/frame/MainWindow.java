@@ -1,5 +1,6 @@
 package by.pub.bar.app.ui.frame;
 
+import by.pub.bar.app.event.entity.IngredientChangedEvent;
 import by.pub.bar.app.ingredient.entity.Ingredient;
 import by.pub.bar.app.ingredient.service.IngredientService;
 import by.pub.bar.app.order.entity.Order;
@@ -40,6 +41,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -332,6 +334,7 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
+        setTitle("Bar handler");
         showAuthPanel();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -362,14 +365,14 @@ public class MainWindow extends JFrame {
         MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-//    @EventListener
+    //    @EventListener
 //    public void handleIngredientRequesting(NewIngredientRequestEvent event) {
 //        orderTableModel.addRow(event.getIngredientRequest());
 //    }
 //
-//    @EventListener
-//    public void handleIngredientChanging(IngredientChangedEvent event) {
-//        ingredientTableModel.removeRow(event.getIngredient());
-//        ingredientTableModel.addRow(event.getIngredient());
-//    }
+    @EventListener
+    public void handleIngredientChanging(IngredientChangedEvent event) {
+        ingredientTableModel.removeRow(event.getIngredient());
+        ingredientTableModel.addRow(event.getIngredient());
+    }
 }
