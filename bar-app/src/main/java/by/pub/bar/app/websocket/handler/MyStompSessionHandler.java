@@ -1,8 +1,8 @@
 package by.pub.bar.app.websocket.handler;
 
+import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;
-import by.pub.bar.app.ingredient_request.service.IngredientRequestService;
-import by.pub.bar.app.websocket.client.CustomWebSocketClient;
+import by.pub.bar.app.websocket.event.entity.ReceiveAcceptedIngredientRequestEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -21,18 +21,18 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomWebSocketClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyStompSessionHandler.class);
 
     private final String websocketHandshakeURL;
     private final WebSocketStompClient webSocketStompClient;
-    private final IngredientRequestService ingredientRequestService;
+    private final BarEventPublisher publisher;
 
     private volatile StompSession stompSession;
 
-    protected MyStompSessionHandler(String websocketHandshakeURL, WebSocketStompClient webSocketStompClient, IngredientRequestService ingredientRequestService) {
+    protected MyStompSessionHandler(String websocketHandshakeURL, WebSocketStompClient webSocketStompClient, BarEventPublisher publisher) {
         this.websocketHandshakeURL = websocketHandshakeURL;
         this.webSocketStompClient = webSocketStompClient;
-        this.ingredientRequestService = ingredientRequestService;
+        this.publisher = publisher;
 
         try {
             stompSession = this.webSocketStompClient.connect(this.websocketHandshakeURL, this).get();
@@ -58,7 +58,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
-        ingredientRequestService.acceptIngredientRequest((IngredientRequest) payload);
+        publisher.publishEvent(new ReceiveAcceptedIngredientRequestEvent((IngredientRequest) payload));
     }
 
     @Override
@@ -72,7 +72,6 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
             } catch (InterruptedException | ExecutionException exc) {
                 LOGGER.error("Cannot connect to storage app", exc);
             }
-
         };
 
         service.schedule(runnable, 10_000, TimeUnit.MILLISECONDS);

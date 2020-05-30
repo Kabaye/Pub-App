@@ -12,7 +12,5 @@ public interface IngredientRequestService {
 
     void deleteByRequestId(String requestId);
 
-    void createAndSendIngredientRequest(String ingredientName, Long amount);
-
-    void acceptIngredientRequest(IngredientRequest ingredientRequest);
+    IngredientRequest createAndSendIngredientRequest(String ingredientName, Long amount);
 }

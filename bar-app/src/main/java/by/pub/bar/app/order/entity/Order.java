@@ -7,8 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Data
@@ -22,5 +24,11 @@ public class Order {
     private List<Product> products;
     private String clientId;
     private Double totalPrice = 0D;
+    @Transient
     private Status status = Status.NOT_ACCEPTED;
+
+    @PostConstruct
+    private void init() {
+        products.forEach(product -> totalPrice += product.getPrice());
+    }
 }

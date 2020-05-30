@@ -21,8 +21,8 @@ public class IngredientRequestController {
     }
 
     @PostMapping
-    public void saveIngredientRequest(@RequestBody IngredientRequest ingredientRequest) {
-        ingredientRequestService.createAndSendIngredientRequest(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
+    public IngredientRequest saveIngredientRequest(@RequestBody IngredientRequest ingredientRequest) {
+        return ingredientRequestService.createAndSendIngredientRequest(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
     }
 
     @GetMapping

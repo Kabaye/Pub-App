@@ -1,10 +1,9 @@
 package by.pub.bar.app.ingredient_request.service;
 
-import by.pub.bar.app.event.entity.NewIngredientRequestEvent;
 import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.ingredient_request.entity.IngredientRequest;
 import by.pub.bar.app.ingredient_request.repository.IngredientRequestRepository;
-import by.pub.bar.app.websocket.event.SendIngredientRequestEvent;
+import by.pub.bar.app.websocket.event.entity.SendIngredientRequestEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,18 +36,13 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     }
 
     @Override
-    public void createAndSendIngredientRequest(String ingredientName, Long amount) {
+    public IngredientRequest createAndSendIngredientRequest(String ingredientName, Long amount) {
         IngredientRequest ingredientRequest = ingredientRequestRepository.save(new IngredientRequest()
                 .setIngredientAmount(amount)
                 .setIngredientName(ingredientName)
                 .setRequestId(UUID.randomUUID().toString()));
 
-        publisher.publishEvent(new NewIngredientRequestEvent(ingredientRequest));
         publisher.publishEvent(new SendIngredientRequestEvent(ingredientRequest));
-    }
-
-    @Override
-    public void acceptIngredientRequest(IngredientRequest ingredientRequest) {
-        ingredientRequestRepository.deleteByRequestId(ingredientRequest.getRequestId());
+        return ingredientRequest;
     }
 }
