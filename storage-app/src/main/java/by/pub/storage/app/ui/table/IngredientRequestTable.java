@@ -1,16 +1,15 @@
 package by.pub.storage.app.ui.table;
 
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
-
-import javax.swing.JTable;
-import javax.swing.table.TableModel;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Supplier;
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 public class IngredientRequestTable extends JTable {
 
-    HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
+    private HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
 
     public IngredientRequestTable(TableModel dm) {
         super(dm);
