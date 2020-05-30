@@ -18,10 +18,16 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
+      <dependency>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+        <groupId>org.springframework.boot</groupId>
+      </dependency>
+      <dependency>
+        <artifactId>storage-app</artifactId>
+        <groupId>by.pub</groupId>
+        <scope>compile</scope>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
     </dependencies>
 
 </project>
