@@ -2,6 +2,7 @@ package by.pub.storage.app.ui;
 
 import by.pub.storage.app.event.entity.IngredientChangedEvent;
 import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
+import by.pub.storage.app.ingredient.entity.Ingredient;
 import by.pub.storage.app.ingredient.service.IngredientService;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
@@ -42,9 +43,6 @@ public class MainWindow extends JFrame {
 
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
     private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 25);
-    private static final Object[] INGREDIENT_TABLE_HEADER = new String[]{"Name", "Amount"};
-    private static final Object[] INGREDIENT_REQUEST_TABLE_HEADER = new String[]{"ID", "Name",
-        "Amount", "Status"};
     private static final int SCREEN_WIDTH = 1000;
     private static final int SCREEN_HEIGHT = 600;
 
@@ -75,10 +73,15 @@ public class MainWindow extends JFrame {
     private final CredentialsService credentialsService;
     private final RequestProviderDialog requestProviderDialog;
 
-    public MainWindow(IngredientService ingredientService,
+    public MainWindow(
+        IngredientTableModel ingredientTableModel,
+        IngredientRequestTableModel ingredientRequestTableModel,
+        IngredientService ingredientService,
         IngredientRequestService ingredientRequestService,
         CredentialsService credentialsService,
         RequestProviderDialog requestProviderDialog) {
+        this.ingredientTableModel = ingredientTableModel;
+        this.ingredientRequestTableModel = ingredientRequestTableModel;
         this.ingredientService = ingredientService;
         this.ingredientRequestService = ingredientRequestService;
         this.credentialsService = credentialsService;
@@ -97,28 +100,35 @@ public class MainWindow extends JFrame {
         //mainPanel
         mainPanel = new JPanel(new GridLayout(1, 2));
         ingredientRequestPanel = new JPanel(new BorderLayout());
-        ingredientRequestTableModel = new IngredientRequestTableModel(
-            ingredientRequestService.findAllIngredientRequests(), INGREDIENT_REQUEST_TABLE_HEADER,
-            0);
-        ingredientRequestTable = new IngredientRequestTable(ingredientRequestTableModel);
+
+        ingredientRequestTable = new IngredientRequestTable(this.ingredientRequestTableModel);
         ingredientRequestScrollPane = new JScrollPane(ingredientRequestTable);
         fulfillButton = new JButton("Fulfill request");
         ingredientRequestLabel = new JLabel("Requests from bartender");
 
         ingredientPanel = new JPanel(new BorderLayout());
-        ingredientTableModel = new IngredientTableModel(ingredientService.findAllIngredients(),
-            INGREDIENT_TABLE_HEADER, 0);
-        ingredientTable = new IngredientTable(ingredientTableModel);
+        ingredientTable = new IngredientTable(this.ingredientTableModel);
         ingredientScrollPane = new JScrollPane(ingredientTable);
         ingredientRequestButton = new JButton("Request ingredients");
         ingredientLabel = new JLabel("Available ingredients");
 
+        loadDataToModels();
         addListeners();
         addComponentsToIngredientPanel();
         addComponentsToIngredientRequestPanel();
         addComponentsToMainPanel();
         configureComponents();
         setWindowPreferences();
+    }
+
+    private void loadDataToModels() {
+        for (IngredientRequest ingredientRequest : ingredientRequestService
+            .findAllIngredientRequests()) {
+            ingredientRequestTableModel.addRow(ingredientRequest);
+        }
+        for (Ingredient ingredient : ingredientService.findAllIngredients()) {
+            ingredientTableModel.addRow(ingredient);
+        }
     }
 
     private void addComponentsToAuthPanel() {
@@ -141,7 +151,7 @@ public class MainWindow extends JFrame {
     }
 
     private void addListeners() {
-        // TODO: 5/30/20 replace password with * and sign out ability
+        // TODO: 5/30/20 add sign out ability
         passwordCheckBox.addActionListener(e -> {
             if (passwordCheckBox.isSelected()) {
                 passwordTextField.setEchoChar((char) 0);
@@ -178,6 +188,8 @@ public class MainWindow extends JFrame {
                     try {
                         ingredientRequest = ingredientRequestService
                             .acceptIngredientRequest(ingredientRequest);
+                        ingredientRequestService
+                            .deleteByRequestId(ingredientRequest.getRequestId());
                         ingredientRequestTableModel.removeRow(index);
                         ingredientRequestTableModel.addRow(ingredientRequest);
                     } catch (RuntimeException exception) {
@@ -273,21 +285,13 @@ public class MainWindow extends JFrame {
     }
 
     @EventListener
+    public void handleIngredientRequesting(NewIngredientRequestEvent event) {
+        ingredientRequestTableModel.addRow(event.getIngredientRequest());
+    }
+
+    @EventListener
     public void handleIngredientChanging(IngredientChangedEvent event) {
         ingredientTableModel.removeRow(event.getIngredient());
         ingredientTableModel.addRow(event.getIngredient());
-        System.out.println("Changing" + event.getIngredient());
-    }
-
-//    @EventListener
-//    public void handleIngredientSaving(IngredientSavedEvent event) {
-//        ingredientTableModel.removeRow(event.getIngredient());
-//        ingredientTableModel.addRow(event.getIngredient());
-//        System.out.println("Saving"+event.getIngredient());
-//    }
-
-    @EventListener
-    public void handleIngredientRequesting(NewIngredientRequestEvent event) {
-        ingredientRequestTableModel.addRow(event.getIngredientRequest());
     }
 }
