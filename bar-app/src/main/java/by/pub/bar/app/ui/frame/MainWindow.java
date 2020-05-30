@@ -144,11 +144,11 @@ public class MainWindow extends JFrame {
     private void addMenuListeners() {
         signOutItem.addActionListener(e -> showAuthPanel());
         clearOrderItem.addActionListener(e -> {
-//            if (orderTableModel.removeAcceptedRows() == 0) {
-//                JOptionPane
-//                    .showMessageDialog(MainWindow.this,
-//                        "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
-//            }
+            if (orderTableModel.removeAcceptedRows() == 0) {
+                JOptionPane
+                    .showMessageDialog(MainWindow.this,
+                        "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
         });
     }
 
