@@ -1,27 +1,33 @@
 package by.pub.storage.app.ui.table;
 
 import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
+
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class IngredientRequestTable extends JTable {
 
+    HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
+
     public IngredientRequestTable(TableModel dm) {
         super(dm);
+
+        map.put(0, () -> Long.class);
+        map.put(1, () -> String.class);
+        map.put(2, () -> Long.class);
+        map.put(3, () -> IngredientRequestStatus.class);
     }
 
     @Override
-    public Class getColumnClass(int column) {
-        switch (column) {
-            case 0:
-            case 2:
-                return Long.class;
-            case 3:
-                return IngredientRequestStatus.class;
-            case 1:
-            default:
-                return String.class;
+    public Class<?> getColumnClass(int column) {
+        final Supplier<Class<?>> classSupplier = map.get(column);
+        if (Objects.isNull(classSupplier)) {
+            return String.class;
         }
+        return classSupplier.get();
     }
 
     @Override
