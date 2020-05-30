@@ -46,21 +46,28 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient takeIngredientsFromBarStand(String ingredientName, Long amount) {
-        Ingredient ingredient = findIngredientByName(ingredientName);
+    public Ingredient takeIngredientsFromBarStand(Ingredient ingredient) {
+        Ingredient ingredientInStand = findIngredientByName(ingredient.getName());
 
-        if (amount > ingredient.getAmount()) {
-            throw new RuntimeException("There is no enough ingredients on B. Request some from provider!");
+        if (ingredient.getAmount() > ingredientInStand.getAmount()) {
+            throw new RuntimeException("There is no enough ingredients on Bar stand. Request some from provider!");
         }
 
-        if (amount.equals(ingredient.getAmount())) {
-            deleteIngredientByName(ingredientName);
-            publisher.publishEvent(new IngredientChangedEvent(ingredient.setAmount(0L)));
-            return Ingredient.of(ingredient).setAmount(amount);
+        if (ingredient.getAmount().equals(ingredientInStand.getAmount())) {
+            deleteIngredientByName(ingredient.getName());
+            publisher.publishEvent(new IngredientChangedEvent(ingredientInStand.setAmount(0L)));
+            return Ingredient.of(ingredientInStand).setAmount(ingredient.getAmount());
         }
 
-        Ingredient updatedIngredient = ingredientRepository.save(ingredient.setAmount(ingredient.getAmount() - amount));
+        Ingredient updatedIngredient = ingredientRepository.save(ingredientInStand.setAmount(ingredientInStand.getAmount() - ingredient.getAmount()));
         publisher.publishEvent(new IngredientChangedEvent(updatedIngredient));
-        return Ingredient.of(updatedIngredient).setAmount(amount);
+        return Ingredient.of(updatedIngredient).setAmount(ingredient.getAmount());
+    }
+
+    @Override
+    public boolean checkForAvailability(Ingredient ingredient) {
+        return ingredientRepository.findAmountOfIngredientByName(ingredient.getName())
+                .orElseThrow(() -> new RuntimeException("There is no ingredient with name: " + ingredient.getName()))
+                .getAmount() >= ingredient.getAmount();
     }
 }

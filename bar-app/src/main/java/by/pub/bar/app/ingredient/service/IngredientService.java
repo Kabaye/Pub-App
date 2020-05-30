@@ -17,5 +17,7 @@ public interface IngredientService {
 
     void deleteIngredientByName(String name);
 
-    Ingredient takeIngredientsFromBarStand(String ingredientName, Long amount);
+    Ingredient takeIngredientsFromBarStand(Ingredient ingredient);
+
+    boolean checkForAvailability(Ingredient ingredient);
 }

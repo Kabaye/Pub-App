@@ -45,10 +45,4 @@ public class IngredientController {
     public void deleteIngredient(@PathVariable String name) {
         ingredientService.deleteIngredientByName(name);
     }
-
-    @PostMapping("/take-ingredient-from-bar-stand/{name}")
-    public Ingredient takeIngredientFromBarStand(@PathVariable String name, @RequestParam Long amount) {
-        return ingredientService.takeIngredientsFromBarStand(name, amount);
-    }
-
 }
