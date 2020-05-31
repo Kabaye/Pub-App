@@ -16,9 +16,17 @@ import by.pub.bar.app.ui.table.OrderTable;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
 import by.pub.bar.app.ui.table_model.OrderTableModel;
 import by.pub.bar.app.utils.Status;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -37,20 +45,15 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindow extends JFrame {
 
     private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
     private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 20);
+    private static final Color MENU_BAR_COLOR = Color.GREEN;
     private static final int SCREEN_WIDTH = 1000;
     private static final int SCREEN_HEIGHT = 600;
 
@@ -118,7 +121,7 @@ public class MainWindow extends JFrame {
         orderTable = new OrderTable(this.orderTableModel);
         orderScrollPane = new JScrollPane(orderTable);
         fulfillButton = new JButton("Fulfill order");
-        orderLabel = new JLabel("Requests from clients");
+        orderLabel = new JLabel("Orders from clients");
 
         ingredientPanel = new JPanel(new BorderLayout());
         ingredientTable = new IngredientTable(this.ingredientTableModel);
@@ -128,7 +131,15 @@ public class MainWindow extends JFrame {
         //menu
         signOutItem = new JMenuItem("Sign out");
         clearOrderItem = new JMenuItem("Clear accepted orders");
-        menuBar = new JMenuBar();
+        menuBar = new JMenuBar() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setColor(MENU_BAR_COLOR);
+                g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+            }
+        };
         userMenu = new JMenu("User");
         orderMenu = new JMenu("Orders");
 
