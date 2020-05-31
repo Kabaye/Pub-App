@@ -1,11 +1,10 @@
 package by.pub.bar.app.ui.table_model;
 
 import by.pub.bar.app.element.ingredient.entity.Ingredient;
-import org.springframework.stereotype.Component;
-
-import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import org.springframework.stereotype.Component;
 
 // TODO: 5/30/20 Check all methods
 @Component
@@ -13,7 +12,7 @@ public class IngredientTableModel extends DefaultTableModel {
 
     private static final Object[] INGREDIENT_TABLE_HEADER = new String[]{"Name", "Amount"};
 
-    private List<Ingredient> ingredients;
+    private final List<Ingredient> ingredients;
 
     public IngredientTableModel() {
         super(INGREDIENT_TABLE_HEADER, 0);

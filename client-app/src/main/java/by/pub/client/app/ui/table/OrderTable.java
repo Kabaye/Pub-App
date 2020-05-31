@@ -9,7 +9,7 @@ import javax.swing.table.TableModel;
 
 public class OrderTable extends JTable {
 
-    private HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
+    private final HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
 
     public OrderTable(TableModel dm) {
         super(dm);

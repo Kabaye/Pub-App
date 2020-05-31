@@ -31,14 +31,12 @@ public class RequestStoreKeeperDialog extends JDialog {
     private final JButton cancelButton;
 
     private final IngredientRequestService ingredientRequestService;
-    private final IngredientTableModel ingredientTableModel;
 
     public RequestStoreKeeperDialog(
         IngredientRequestService ingredientRequestService,
         IngredientTableModel ingredientTableModel) {
         super((JFrame) null, "Request for ingredients");
         this.ingredientRequestService = ingredientRequestService;
-        this.ingredientTableModel = ingredientTableModel;
 
         mainPanel = new JPanel(new BorderLayout());
 

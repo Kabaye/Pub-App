@@ -11,7 +11,7 @@ public class ProductTableModel extends DefaultTableModel {
 
     private static final Object[] PRODUCT_TABLE_HEADER = new String[]{"Name", "Price"};
 
-    private List<Product> products;
+    private final List<Product> products;
 
     public ProductTableModel() {
         super(PRODUCT_TABLE_HEADER, 0);
@@ -23,10 +23,6 @@ public class ProductTableModel extends DefaultTableModel {
             new Object[]{product.getName(),
                 product.getPrice()});
         products.add(product);
-    }
-
-    public Product getValueAt(int rowIndex) {
-        return products.get(rowIndex);
     }
 
     @Override

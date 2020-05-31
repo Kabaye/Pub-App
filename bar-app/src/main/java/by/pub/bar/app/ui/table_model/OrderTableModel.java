@@ -2,11 +2,10 @@ package by.pub.bar.app.ui.table_model;
 
 import by.pub.bar.app.element.order.entity.Order;
 import by.pub.bar.app.utils.Status;
-import org.springframework.stereotype.Component;
-
-import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import org.springframework.stereotype.Component;
 
 @Component
 public class OrderTableModel extends DefaultTableModel {
@@ -14,7 +13,7 @@ public class OrderTableModel extends DefaultTableModel {
     private static final Object[] ORDER_TABLE_HEADER = new String[]{"ID", "Client ID",
         "Price", "Status"};
 
-    private List<Order> orders;
+    private final List<Order> orders;
 
     public OrderTableModel() {
         super(ORDER_TABLE_HEADER, 0);

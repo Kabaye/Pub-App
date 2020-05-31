@@ -8,7 +8,7 @@ import javax.swing.table.TableModel;
 
 public class IngredientTable extends JTable {
 
-    private HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
+    private final HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
 
     public IngredientTable(TableModel dm) {
         super(dm);

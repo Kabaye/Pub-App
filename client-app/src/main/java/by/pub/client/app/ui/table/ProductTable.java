@@ -8,7 +8,7 @@ import javax.swing.table.TableModel;
 
 public class ProductTable extends JTable {
 
-    private HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
+    private final HashMap<Integer, Supplier<Class<?>>> map = new HashMap<>();
 
     public ProductTable(TableModel dm) {
         super(dm);

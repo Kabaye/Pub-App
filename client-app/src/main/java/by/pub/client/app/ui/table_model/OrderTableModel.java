@@ -12,7 +12,7 @@ public class OrderTableModel extends DefaultTableModel {
 
     private static final Object[] ORDER_TABLE_HEADER = new String[]{"Price", "Status"};
 
-    private List<Order> orders;
+    private final List<Order> orders;
 
     public OrderTableModel() {
         super(ORDER_TABLE_HEADER, 0);
