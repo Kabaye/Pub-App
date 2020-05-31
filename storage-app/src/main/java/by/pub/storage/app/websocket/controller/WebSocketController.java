@@ -1,7 +1,7 @@
 package by.pub.storage.app.websocket.controller;
 
-import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.element.ingredient_request.service.IngredientRequestService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 

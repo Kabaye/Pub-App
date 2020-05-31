@@ -1,11 +1,11 @@
 package by.pub.bar.app.ui.frame;
 
+import by.pub.bar.app.element.ingredient.entity.Ingredient;
+import by.pub.bar.app.element.ingredient.service.IngredientService;
+import by.pub.bar.app.element.order.entity.Order;
+import by.pub.bar.app.element.order.service.OrderService;
 import by.pub.bar.app.event.entity.IngredientChangedEvent;
 import by.pub.bar.app.event.entity.NewOrderSavedEvent;
-import by.pub.bar.app.ingredient.entity.Ingredient;
-import by.pub.bar.app.ingredient.service.IngredientService;
-import by.pub.bar.app.order.entity.Order;
-import by.pub.bar.app.order.service.OrderService;
 import by.pub.bar.app.security.service.CredentialsService;
 import by.pub.bar.app.ui.dialog.OrderInfoDialog;
 import by.pub.bar.app.ui.dialog.RequestStoreKeeperDialog;
@@ -16,14 +16,9 @@ import by.pub.bar.app.ui.table.OrderTable;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
 import by.pub.bar.app.ui.table_model.OrderTableModel;
 import by.pub.bar.app.utils.Status;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,8 +37,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 
 @Component
 public class MainWindow extends JFrame {

@@ -1,10 +1,11 @@
 package by.pub.bar.app.ui.table_model;
 
-import by.pub.bar.app.ingredient.entity.Ingredient;
+import by.pub.bar.app.element.ingredient.entity.Ingredient;
+import org.springframework.stereotype.Component;
+
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
-import org.springframework.stereotype.Component;
 
 // TODO: 5/30/20 Check all methods
 @Component

@@ -7,5 +7,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ProductDTO {
     private String name;
-    private Double price;
+    private Double price = 0D;
 }

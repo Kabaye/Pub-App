@@ -1,6 +1,6 @@
 package by.pub.bar.app.event.entity;
 
-import by.pub.bar.app.order.entity.Order;
+import by.pub.bar.app.element.order.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

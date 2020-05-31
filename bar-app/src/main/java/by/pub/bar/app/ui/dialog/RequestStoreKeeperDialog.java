@@ -1,11 +1,9 @@
 package by.pub.bar.app.ui.dialog;
 
-import by.pub.bar.app.ingredient_request.service.IngredientRequestService;
+import by.pub.bar.app.element.ingredient_request.service.IngredientRequestService;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -15,7 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 
 @Component
 public class RequestStoreKeeperDialog extends JDialog {

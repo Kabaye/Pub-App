@@ -1,13 +1,9 @@
 package by.pub.bar.app.ui.dialog;
 
-import by.pub.bar.app.ingredient.entity.Ingredient;
-import by.pub.bar.app.order.entity.Order;
-import by.pub.bar.app.product.entity.Product;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
+import by.pub.bar.app.element.ingredient.entity.Ingredient;
+import by.pub.bar.app.element.order.entity.Order;
+import by.pub.bar.app.element.product.entity.Product;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -15,6 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 
 public class OrderInfoDialog extends JDialog {
 
@@ -72,8 +73,8 @@ public class OrderInfoDialog extends JDialog {
     private void addData() {
         for (Product product : order.getProducts()) {
             model.addRow(new Object[]{product.getName(), product.getPrice(), "", ""});
-            for (Ingredient ingredient : product.getUsedIngredients()) {
-                model.addRow(new Object[]{"", "", ingredient.getName(), ingredient.getAmount()});
+            for (Ingredient simpleIngredient : product.getUsedIngredients()) {
+                model.addRow(new Object[]{"", "", simpleIngredient.getName(), simpleIngredient.getAmount()});
             }
         }
     }

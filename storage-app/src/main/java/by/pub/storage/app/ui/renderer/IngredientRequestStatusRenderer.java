@@ -1,12 +1,13 @@
 package by.pub.storage.app.ui.renderer;
 
-import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequestStatus;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 
 public class IngredientRequestStatusRenderer extends DefaultTableCellRenderer {
 

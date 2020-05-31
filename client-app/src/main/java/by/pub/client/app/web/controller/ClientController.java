@@ -18,7 +18,7 @@ public class ClientController {
         this.orderConverter = orderConverter;
     }
 
-    @PostMapping
+    @PostMapping("/accept-order")
     public void handleAcceptedOrder(OrderDTO acceptedOrderDTO) {
         clientService.handleAcceptedOrder(orderConverter.toEntity(acceptedOrderDTO));
     }

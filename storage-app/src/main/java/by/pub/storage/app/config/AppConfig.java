@@ -1,6 +1,6 @@
 package by.pub.storage.app.config;
 
-import by.pub.storage.app.ingredient.provider.IngredientProvider;
+import by.pub.storage.app.element.ingredient.provider.IngredientProvider;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

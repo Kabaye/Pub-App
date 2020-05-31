@@ -10,6 +10,7 @@ import by.pub.client.app.web.web_client.WebClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +42,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void handleAcceptedOrder(Order order) {
+        System.out.println(order);
         publisher.publishEvent(new ReceivedAcceptedOrderEvent().setOrder(order));
+    }
+
+    @Override
+    public String createUniqueID() {
+        return UUID.randomUUID().toString();
     }
 }

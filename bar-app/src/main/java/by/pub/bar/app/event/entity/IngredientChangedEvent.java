@@ -1,6 +1,6 @@
 package by.pub.bar.app.event.entity;
 
-import by.pub.bar.app.ingredient.entity.Ingredient;
+import by.pub.bar.app.element.ingredient.entity.Ingredient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

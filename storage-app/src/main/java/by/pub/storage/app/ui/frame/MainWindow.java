@@ -1,12 +1,12 @@
 package by.pub.storage.app.ui.frame;
 
+import by.pub.storage.app.element.ingredient.entity.Ingredient;
+import by.pub.storage.app.element.ingredient.service.IngredientService;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequestStatus;
+import by.pub.storage.app.element.ingredient_request.service.IngredientRequestService;
 import by.pub.storage.app.event.entity.IngredientChangedEvent;
 import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
-import by.pub.storage.app.ingredient.entity.Ingredient;
-import by.pub.storage.app.ingredient.service.IngredientService;
-import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
-import by.pub.storage.app.ingredient_request.service.IngredientRequestService;
 import by.pub.storage.app.security.service.CredentialsService;
 import by.pub.storage.app.ui.dialog.RequestProviderDialog;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
@@ -15,11 +15,9 @@ import by.pub.storage.app.ui.table.IngredientRequestTable;
 import by.pub.storage.app.ui.table.IngredientTable;
 import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
 import by.pub.storage.app.ui.table_model.IngredientTableModel;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.WindowEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,8 +36,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 
 @Component
 public class MainWindow extends JFrame {

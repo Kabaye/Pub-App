@@ -1,11 +1,12 @@
 package by.pub.storage.app.ui.table_model;
 
-import by.pub.storage.app.ingredient_request.entity.IngredientRequest;
-import by.pub.storage.app.ingredient_request.entity.IngredientRequestStatus;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequest;
+import by.pub.storage.app.element.ingredient_request.entity.IngredientRequestStatus;
+import org.springframework.stereotype.Component;
+
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.table.DefaultTableModel;
-import org.springframework.stereotype.Component;
 
 @Component
 public class IngredientRequestTableModel extends DefaultTableModel {

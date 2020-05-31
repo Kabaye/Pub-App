@@ -11,4 +11,6 @@ public interface ClientService {
     Order requestOrder(String clientId, List<Product> products);
 
     void handleAcceptedOrder(Order order);
+
+    String createUniqueID();
 }
