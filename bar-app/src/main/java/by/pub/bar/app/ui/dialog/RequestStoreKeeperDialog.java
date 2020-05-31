@@ -2,8 +2,10 @@ package by.pub.bar.app.ui.dialog;
 
 import by.pub.bar.app.element.ingredient_request.service.IngredientRequestService;
 import by.pub.bar.app.ui.table_model.IngredientTableModel;
-import org.springframework.stereotype.Component;
-
+import by.pub.bar.app.ui.utils.WindowUtils;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,17 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RequestStoreKeeperDialog extends JDialog {
-
-    private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 15);
-    private static final int SCREEN_WIDTH = 250;
-    private static final int SCREEN_HEIGHT = 100;
 
     private final JPanel mainPanel;
     private final JPanel upperPanel;
@@ -93,20 +88,22 @@ public class RequestStoreKeeperDialog extends JDialog {
         //panels configuration
         upperPanel.setBorder(BorderFactory.createBevelBorder(1));
         lowerPanel.setBorder(BorderFactory.createBevelBorder(1));
+        upperPanel.setBackground(WindowUtils.getUpperPanelColor());
         //labels configuration
-        nameLabel.setFont(HEADER_FONT);
+        nameLabel.setFont(WindowUtils.getDialogHeaderFont());
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        amountLabel.setFont(HEADER_FONT);
+        amountLabel.setFont(WindowUtils.getDialogHeaderFont());
         amountLabel.setHorizontalAlignment(SwingConstants.CENTER);
         //buttons configuration
-        requestButton.setFont(HEADER_FONT);
-        cancelButton.setFont(HEADER_FONT);
+        requestButton.setFont(WindowUtils.getDialogHeaderFont());
+        cancelButton.setFont(WindowUtils.getDialogHeaderFont());
     }
 
     private void setWindowPreferences() {
         setTitle("Bar: Ingredients handler");
         setContentPane(mainPanel);
-        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        setPreferredSize(
+            new Dimension(WindowUtils.getDialogScreenWidth(), WindowUtils.getDialogScreenHeight()));
         setResizable(false);
         pack();
     }

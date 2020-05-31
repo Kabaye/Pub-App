@@ -15,10 +15,8 @@ import by.pub.storage.app.ui.table.IngredientRequestTable;
 import by.pub.storage.app.ui.table.IngredientTable;
 import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
 import by.pub.storage.app.ui.table_model.IngredientTableModel;
+import by.pub.storage.app.ui.utils.WindowUtils;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -46,12 +44,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindow extends JFrame {
-
-    private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 30);
-    private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 20);
-    private static final Color MENU_BAR_COLOR = Color.ORANGE;
-    private static final int SCREEN_WIDTH = 1000;
-    private static final int SCREEN_HEIGHT = 600;
 
     private final JPanel mainPanel;
     private final JPanel authPanel;
@@ -132,7 +124,7 @@ public class MainWindow extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(MENU_BAR_COLOR);
+                g2d.setColor(WindowUtils.getMenuBarColor());
                 g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
             }
         };
@@ -193,10 +185,10 @@ public class MainWindow extends JFrame {
     }
 
     private void configureAuthPanelComponents() {
-        usernameLabel.setFont(TEXT_FONT);
-        passwordLabel.setFont(TEXT_FONT);
-        logInButton.setFont(TEXT_FONT);
-        exitButton.setFont(TEXT_FONT);
+        usernameLabel.setFont(WindowUtils.getTextFont());
+        passwordLabel.setFont(WindowUtils.getTextFont());
+        logInButton.setFont(WindowUtils.getTextFont());
+        exitButton.setFont(WindowUtils.getTextFont());
         passwordTextField.setEchoChar('*');
     }
 
@@ -270,14 +262,14 @@ public class MainWindow extends JFrame {
     }
 
     private void configureButtons() {
-        fulfillButton.setFont(HEADER_FONT);
-        ingredientRequestButton.setFont(HEADER_FONT);
+        fulfillButton.setFont(WindowUtils.getHeaderFont());
+        ingredientRequestButton.setFont(WindowUtils.getHeaderFont());
     }
 
     private void configureLabels() {
-        ingredientLabel.setFont(HEADER_FONT);
+        ingredientLabel.setFont(WindowUtils.getHeaderFont());
         ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        ingredientRequestLabel.setFont(HEADER_FONT);
+        ingredientRequestLabel.setFont(WindowUtils.getHeaderFont());
         ingredientRequestLabel.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
@@ -300,11 +292,8 @@ public class MainWindow extends JFrame {
 
     private void configureScrollPanes() {
         ingredientScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ingredientScrollPane.setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
         ingredientRequestScrollPane
                 .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        ingredientRequestScrollPane
-                .setPreferredSize(new Dimension(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2));
     }
 
     private void configurePanels() {
@@ -329,7 +318,7 @@ public class MainWindow extends JFrame {
         contentPane.repaint();
 
         menuBar.setVisible(false);
-        setBounds(0, 0, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 5);
+        setBounds(0, 0, WindowUtils.getAuthScreenWidth(), WindowUtils.getAuthScreenHeight());
     }
 
     private void showMainPanel() {
@@ -341,7 +330,8 @@ public class MainWindow extends JFrame {
         contentPane.repaint();
 
         menuBar.setVisible(true);
-        MainWindow.this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        MainWindow.this
+            .setBounds(0, 0, WindowUtils.getScreenWidth(), WindowUtils.getScreenHeight());
     }
 
     @EventListener

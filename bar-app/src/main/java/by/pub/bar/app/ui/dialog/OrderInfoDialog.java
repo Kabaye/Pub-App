@@ -3,7 +3,11 @@ package by.pub.bar.app.ui.dialog;
 import by.pub.bar.app.element.ingredient.entity.Ingredient;
 import by.pub.bar.app.element.order.entity.Order;
 import by.pub.bar.app.element.product.entity.Product;
-
+import by.pub.bar.app.ui.utils.WindowUtils;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -11,21 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
 
 public class OrderInfoDialog extends JDialog {
 
     private static final Object[] INFO_TABLE_HEADER = new String[]{"Product", "Price", "Ingredient",
         "Amount"};
-
-    private static final Font HEADER_FONT = new Font("Serif", Font.PLAIN, 20);
-    private static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 15);
-    private static final int SCREEN_WIDTH = 400;
-    private static final int SCREEN_HEIGHT = 200;
 
     private final JPanel mainPanel;
     private final JPanel infoPanel;
@@ -61,20 +55,24 @@ public class OrderInfoDialog extends JDialog {
 
     private void configureComponents() {
         infoTable.setFillsViewportHeight(true);
-        infoTable.setPreferredScrollableViewportSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        infoTable.setFont(TEXT_FONT);
+        infoTable.setPreferredScrollableViewportSize(
+            new Dimension(WindowUtils.getInfoDialogScreenWidth(),
+                WindowUtils.getInfoDialogScreenHeight()));
+        infoTable.setFont(WindowUtils.getInfoDialogTextFontFont());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(new Rectangle(SCREEN_WIDTH, SCREEN_HEIGHT));
-        orderIdLabel.setFont(HEADER_FONT);
-        priceLabel.setFont(HEADER_FONT);
-        cancelButton.setFont(HEADER_FONT);
+        scrollPane.setBounds(new Rectangle(WindowUtils.getInfoDialogScreenWidth(),
+            WindowUtils.getInfoDialogScreenHeight()));
+        orderIdLabel.setFont(WindowUtils.getInfoDialogHeaderFont());
+        priceLabel.setFont(WindowUtils.getInfoDialogHeaderFont());
+        cancelButton.setFont(WindowUtils.getInfoDialogHeaderFont());
     }
 
     private void addData() {
         for (Product product : order.getProducts()) {
             model.addRow(new Object[]{product.getName(), product.getPrice(), "", ""});
             for (Ingredient simpleIngredient : product.getUsedIngredients()) {
-                model.addRow(new Object[]{"", "", simpleIngredient.getName(), simpleIngredient.getAmount()});
+                model.addRow(
+                    new Object[]{"", "", simpleIngredient.getName(), simpleIngredient.getAmount()});
             }
         }
     }
