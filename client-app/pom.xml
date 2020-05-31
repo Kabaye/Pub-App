@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>by.pub</groupId>
-        <artifactId>pub-app</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <artifactId>client-app</artifactId>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>client-app</artifactId>
+  <dependencies>
+
+  </dependencies>
+  <description>Client microservice</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>client-app</name>
+  <parent>
+    <artifactId>pub-app</artifactId>
+    <groupId>by.pub</groupId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>client-app</name>
-    <description>Client microservice</description>
+  </parent>
 
-    <dependencies>
-
-    </dependencies>
+  <version>0.0.1-SNAPSHOT</version>
 </project>

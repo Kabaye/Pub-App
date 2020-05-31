@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>pub-app</artifactId>
-        <groupId>by.pub</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>storage-app</artifactId>
 
-    <artifactId>storage-app</artifactId>
-    <description>Storage microservice</description>
-    <modelVersion>4.0.0</modelVersion>
-    <name>storage-app</name>
+  <dependencies>
+    <dependency>
+      <artifactId>mockito-core</artifactId>
+      <groupId>org.mockito</groupId>
+      <version>3.3.3</version>
+    </dependency>
+  </dependencies>
+  <description>Storage microservice</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>storage-app</name>
 
-    <dependencies>
-        <dependency>
-            <artifactId>mockito-core</artifactId>
-            <groupId>org.mockito</groupId>
-            <version>3.3.3</version>
-        </dependency>
-    </dependencies>
+  <parent>
+    <artifactId>pub-app</artifactId>
+    <groupId>by.pub</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
 
-    <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 </project>

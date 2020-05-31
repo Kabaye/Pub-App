@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+
     private final WebClient webClient;
     private final OrderConverter orderConverter;
     private final ProductConverter productConverter;
     private final ClientEventPublisher publisher;
 
-    public ClientServiceImpl(WebClient webClient, OrderConverter orderConverter, ProductConverter productConverter, ClientEventPublisher publisher) {
+    public ClientServiceImpl(WebClient webClient, OrderConverter orderConverter,
+        ProductConverter productConverter, ClientEventPublisher publisher) {
         this.webClient = webClient;
         this.orderConverter = orderConverter;
         this.productConverter = productConverter;
@@ -28,14 +30,15 @@ public class ClientServiceImpl implements ClientService {
 
     public List<Product> findAllProducts() {
         return webClient.findAllProducts()
-                .stream()
-                .map(productConverter::toEntity)
-                .collect(Collectors.toList());
+            .stream()
+            .map(productConverter::toEntity)
+            .collect(Collectors.toList());
     }
 
     @Override
     public Order requestOrder(String clientId, List<Product> products) {
-        return orderConverter.toEntity(webClient.createOrder(orderConverter.toDTO(new Order().setProducts(products)
+        return orderConverter
+            .toEntity(webClient.createOrder(orderConverter.toDTO(new Order().setProducts(products)
                 .setClientId(clientId))));
     }
 

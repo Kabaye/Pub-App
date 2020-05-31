@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class WebSocketController {
+
     private final IngredientRequestService ingredientRequestService;
 
     public WebSocketController(IngredientRequestService ingredientRequestService) {

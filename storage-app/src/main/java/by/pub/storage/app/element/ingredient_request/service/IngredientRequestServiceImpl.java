@@ -7,18 +7,21 @@ import by.pub.storage.app.element.ingredient_request.repository.IngredientReques
 import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
 import by.pub.storage.app.event.publisher.StorageEventPublisher;
 import by.pub.storage.app.websocket.message_sender.IngredientRequestWebSocketMessageSender;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class IngredientRequestServiceImpl implements IngredientRequestService {
+
     private final IngredientRequestRepository ingredientRequestRepository;
     private final IngredientService ingredientService;
     private final IngredientRequestWebSocketMessageSender ingredientRequestWebSocketMessageSender;
     private final StorageEventPublisher publisher;
 
-    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository, IngredientService ingredientService, IngredientRequestWebSocketMessageSender ingredientRequestWebSocketMessageSender, StorageEventPublisher publisher) {
+    public IngredientRequestServiceImpl(IngredientRequestRepository ingredientRequestRepository,
+        IngredientService ingredientService,
+        IngredientRequestWebSocketMessageSender ingredientRequestWebSocketMessageSender,
+        StorageEventPublisher publisher) {
         this.ingredientRequestRepository = ingredientRequestRepository;
         this.ingredientService = ingredientService;
         this.ingredientRequestWebSocketMessageSender = ingredientRequestWebSocketMessageSender;
@@ -28,7 +31,8 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
     @Override
     public IngredientRequest findByRequestId(String requestId) {
         return ingredientRequestRepository.findByRequestId(requestId)
-                .orElseThrow(() -> new RuntimeException("There is no Ingredient request with request id: " + requestId));
+            .orElseThrow(() -> new RuntimeException(
+                "There is no Ingredient request with request id: " + requestId));
     }
 
     @Override
@@ -38,15 +42,18 @@ public class IngredientRequestServiceImpl implements IngredientRequestService {
 
     @Override
     public IngredientRequest saveIngredientRequest(IngredientRequest ingredientRequest) {
-        final IngredientRequest savedIngredientRequest = ingredientRequestRepository.save(ingredientRequest);
+        final IngredientRequest savedIngredientRequest = ingredientRequestRepository
+            .save(ingredientRequest);
         publisher.publishEvent(new NewIngredientRequestEvent(ingredientRequest));
         return savedIngredientRequest;
     }
 
     @Override
     public IngredientRequest acceptIngredientRequest(IngredientRequest ingredientRequest) {
-        ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
-        ingredientRequestWebSocketMessageSender.sendAcceptedIngredientRequest(ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED));
+        ingredientService.takeIngredientsFromStorage(ingredientRequest.getIngredientName(),
+            ingredientRequest.getIngredientAmount());
+        ingredientRequestWebSocketMessageSender.sendAcceptedIngredientRequest(
+            ingredientRequest.setStatus(IngredientRequestStatus.ACCEPTED));
         deleteByRequestId(ingredientRequest.getRequestId());
         return ingredientRequest;
     }

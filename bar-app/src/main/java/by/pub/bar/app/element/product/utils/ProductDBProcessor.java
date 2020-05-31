@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductDBProcessor {
+
     public Product toDB(Product product) {
         long l = (long) (product.getPrice() * 1000);
         return product.setPrice((double) l);

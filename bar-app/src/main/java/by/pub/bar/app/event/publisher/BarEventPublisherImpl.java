@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BarEventPublisherImpl implements BarEventPublisher {
+
     private final ApplicationEventPublisher publisher;
 
     public BarEventPublisherImpl(ApplicationEventPublisher publisher) {

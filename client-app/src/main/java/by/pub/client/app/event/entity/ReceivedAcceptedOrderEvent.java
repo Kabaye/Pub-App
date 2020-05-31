@@ -9,5 +9,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class ReceivedAcceptedOrderEvent extends ClientAppEvent {
+
     private Order order;
 }

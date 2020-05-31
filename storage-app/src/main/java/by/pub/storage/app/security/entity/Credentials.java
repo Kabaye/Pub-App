@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Accessors(chain = true)
 @Document(collection = "storage_credentials")
 public class Credentials {
+
     @Id
     private String name;
     private String password;

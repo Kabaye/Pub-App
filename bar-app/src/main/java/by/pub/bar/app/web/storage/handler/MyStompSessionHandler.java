@@ -3,6 +3,11 @@ package by.pub.bar.app.web.storage.handler;
 import by.pub.bar.app.element.ingredient_request.entity.IngredientRequest;
 import by.pub.bar.app.event.publisher.BarEventPublisher;
 import by.pub.bar.app.web.storage.event.entity.ReceiveAcceptedIngredientRequestEvent;
+import java.lang.reflect.Type;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -13,14 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.lang.reflect.Type;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 @Component
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MyStompSessionHandler.class);
 
     private final String websocketHandshakeURL;
@@ -29,13 +29,15 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
     private volatile StompSession stompSession;
 
-    protected MyStompSessionHandler(String websocketHandshakeURL, WebSocketStompClient webSocketStompClient, BarEventPublisher publisher) {
+    protected MyStompSessionHandler(String websocketHandshakeURL,
+        WebSocketStompClient webSocketStompClient, BarEventPublisher publisher) {
         this.websocketHandshakeURL = websocketHandshakeURL;
         this.webSocketStompClient = webSocketStompClient;
         this.publisher = publisher;
 
         try {
-            stompSession = this.webSocketStompClient.connect(this.websocketHandshakeURL, this).get();
+            stompSession = this.webSocketStompClient.connect(this.websocketHandshakeURL, this)
+                .get();
         } catch (Exception exc) {
             LOGGER.error("Cannot connect to storage app", exc);
         }
@@ -47,8 +49,10 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     }
 
     @Override
-    public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-        LOGGER.error("Received error on socket channel with session id: " + session.getSessionId(), exception);
+    public void handleException(StompSession session, StompCommand command, StompHeaders headers,
+        byte[] payload, Throwable exception) {
+        LOGGER.error("Received error on socket channel with session id: " + session.getSessionId(),
+            exception);
     }
 
     @Override
@@ -58,7 +62,8 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void handleFrame(StompHeaders headers, Object payload) {
-        publisher.publishEvent(new ReceiveAcceptedIngredientRequestEvent((IngredientRequest) payload));
+        publisher
+            .publishEvent(new ReceiveAcceptedIngredientRequestEvent((IngredientRequest) payload));
     }
 
     @Override
@@ -66,7 +71,8 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
         Runnable runnable = () -> {
-            ListenableFuture<StompSession> future = webSocketStompClient.connect(websocketHandshakeURL, this);
+            ListenableFuture<StompSession> future = webSocketStompClient
+                .connect(websocketHandshakeURL, this);
             try {
                 stompSession = future.get();
             } catch (InterruptedException | ExecutionException exc) {

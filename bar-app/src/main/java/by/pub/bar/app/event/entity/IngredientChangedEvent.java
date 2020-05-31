@@ -7,5 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class IngredientChangedEvent extends BarAppEvent {
+
     private final Ingredient ingredient;
 }

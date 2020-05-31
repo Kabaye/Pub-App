@@ -2,6 +2,8 @@ package by.pub.storage.app.element.ingredient.controller;
 
 import by.pub.storage.app.element.ingredient.entity.Ingredient;
 import by.pub.storage.app.element.ingredient.service.IngredientService;
+import java.util.List;
+import java.util.Objects;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Objects;
-
 @RestController
 @RequestMapping("/api/v1/ingredients")
 public class IngredientController {
+
     private final IngredientService ingredientService;
 
     public IngredientController(IngredientService ingredientService) {
@@ -34,7 +34,8 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredient")
-    public Ingredient getIngredients(@RequestParam(required = false) String name, @RequestParam(required = false) String id) {
+    public Ingredient getIngredients(@RequestParam(required = false) String name,
+        @RequestParam(required = false) String id) {
         if (Objects.nonNull(name)) {
             return ingredientService.findIngredientByName(name);
         }

@@ -9,5 +9,6 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class NewOrderSavedEvent extends BarAppEvent {
+
     private Order order;
 }

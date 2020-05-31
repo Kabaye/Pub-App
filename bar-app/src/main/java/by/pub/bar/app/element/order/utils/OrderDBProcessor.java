@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderDBProcessor {
+
     public Order toDB(Order Order) {
         long l = (long) (Order.getTotalPrice() * 1000);
         return Order.setTotalPrice((double) l);
@@ -15,7 +16,8 @@ public class OrderDBProcessor {
     }
 
     public Order preprocessTotalPrice(Order order) {
-        order.getProducts().forEach(product -> order.setTotalPrice(order.getTotalPrice() + product.getPrice()));
+        order.getProducts()
+            .forEach(product -> order.setTotalPrice(order.getTotalPrice() + product.getPrice()));
         return order;
     }
 }

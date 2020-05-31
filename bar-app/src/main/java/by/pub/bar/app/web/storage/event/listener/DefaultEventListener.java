@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultEventListener {
+
     private final IngredientRequestService ingredientRequestService;
     private final IngredientService ingredientService;
     private final MyStompSessionHandler sessionHandler;
@@ -25,13 +26,15 @@ public class DefaultEventListener {
     @EventListener
     public void handleAcceptedIngredientRequest(ReceiveAcceptedIngredientRequestEvent event) {
         ingredientRequestService.deleteByRequestId(event.getIngredientRequest().getRequestId());
-        Ingredient ingredient = new Ingredient().setAmount(event.getIngredientRequest().getIngredientAmount())
-                .setName(event.getIngredientRequest().getIngredientName());
+        Ingredient ingredient = new Ingredient()
+            .setAmount(event.getIngredientRequest().getIngredientAmount())
+            .setName(event.getIngredientRequest().getIngredientName());
         ingredientService.putIngredientOnBarStand(ingredient);
     }
 
     @EventListener
     public void sendIngredientRequest(SendIngredientRequestEvent ingredientRequestEvent) {
-        sessionHandler.sendData("/storage-app/request-ingredient", ingredientRequestEvent.getIngredientRequest());
+        sessionHandler.sendData("/storage-app/request-ingredient",
+            ingredientRequestEvent.getIngredientRequest());
     }
 }

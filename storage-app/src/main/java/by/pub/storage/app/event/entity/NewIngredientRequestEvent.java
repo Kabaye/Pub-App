@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class NewIngredientRequestEvent extends StorageAppEvent {
+
     private final IngredientRequest ingredientRequest;
 
 }

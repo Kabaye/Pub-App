@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StorageEventPublisherImpl implements StorageEventPublisher {
+
     private final ApplicationEventPublisher publisher;
 
     public StorageEventPublisherImpl(ApplicationEventPublisher publisher) {

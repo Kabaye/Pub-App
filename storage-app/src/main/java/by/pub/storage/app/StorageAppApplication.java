@@ -12,9 +12,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 public class StorageAppApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = new SpringApplicationBuilder(StorageAppApplication.class)
-                .headless(false)
-                .run(args);
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(
+            StorageAppApplication.class)
+            .headless(false)
+            .run(args);
 
         EventQueue.invokeLater(() -> {
             MainWindow mainWindow = context.getBean(MainWindow.class);

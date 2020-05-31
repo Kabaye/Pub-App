@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ClientEventPublisherImpl implements ClientEventPublisher {
+
     private final ApplicationEventPublisher publisher;
 
     public ClientEventPublisherImpl(ApplicationEventPublisher publisher) {

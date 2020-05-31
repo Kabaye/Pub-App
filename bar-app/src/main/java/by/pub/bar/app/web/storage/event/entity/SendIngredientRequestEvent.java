@@ -10,5 +10,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @AllArgsConstructor
 public class SendIngredientRequestEvent extends BarAppEvent {
+
     private IngredientRequest ingredientRequest;
 }

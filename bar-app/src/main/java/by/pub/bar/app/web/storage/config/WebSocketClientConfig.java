@@ -9,9 +9,11 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 @Configuration
 public class WebSocketClientConfig {
+
     @Bean
     public WebSocketStompClient webSocketStompClient() {
-        WebSocketStompClient webSocketStompClient = new WebSocketStompClient(new StandardWebSocketClient());
+        WebSocketStompClient webSocketStompClient = new WebSocketStompClient(
+            new StandardWebSocketClient());
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
         webSocketStompClient.setTaskScheduler(new ThreadPoolTaskScheduler());
         return webSocketStompClient;

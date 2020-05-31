@@ -15,9 +15,9 @@ public class WebConfig {
     @Bean
     public Docket swaggerAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("by.pub.client.app"))
-                .paths(PathSelectors.any())
-                .build();
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("by.pub.client.app"))
+            .paths(PathSelectors.any())
+            .build();
     }
 }
