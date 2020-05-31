@@ -1,4 +1,4 @@
-package by.pub.client.app.ui;
+package by.pub.client.app.ui.frame;
 
 import by.pub.client.app.event.entity.ReceivedAcceptedOrderEvent;
 import by.pub.client.app.order.entity.Order;
@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -49,6 +50,8 @@ public class MainWindow extends JFrame {
     private final JPanel orderPanel;
     private final JLabel productLabel;
     private final JLabel orderLabel;
+    private final JLabel usernameLabel;
+    private final JButton usernameButton;
     private final JTable productTable;
     private final JTable orderTable;
     private final ProductTableModel productTableModel;
@@ -56,6 +59,7 @@ public class MainWindow extends JFrame {
     private final JButton orderButton;
     private final JButton enterButton;
     private final JButton exitButton;
+    private final JTextField usernameTextField;
 
     private final ClientService clientService;
 
@@ -66,6 +70,7 @@ public class MainWindow extends JFrame {
     private final JMenuItem clearOrderItem;
 
     private String clientId;
+    private String clientName;
 
     public MainWindow(
         ProductTableModel productTableModel,
@@ -75,9 +80,11 @@ public class MainWindow extends JFrame {
         this.orderTableModel = orderTableModel;
         this.clientService = clientService;
         //authPanel
-        authPanel = new JPanel(new GridLayout(1, 2, 1, 0));
+        authPanel = new JPanel(new GridLayout(2, 2, 1, 0));
         enterButton = new JButton("Enter bar");
         exitButton = new JButton("Exit");
+        usernameLabel = new JLabel("Username");
+        usernameTextField = new JTextField();
         addComponentsToAuthPanel();
         configureAuthPanelComponents();
         //mainPanel
@@ -93,6 +100,7 @@ public class MainWindow extends JFrame {
         orderTable = new OrderTable(this.orderTableModel);
         orderScrollPane = new JScrollPane(orderTable);
         orderLabel = new JLabel("Your orders");
+        usernameButton = new JButton();
         //menu
         leaveItem = new JMenuItem("Sign out");
         clearOrderItem = new JMenuItem("Clear accepted requests");
@@ -147,21 +155,20 @@ public class MainWindow extends JFrame {
     }
 
     private void addComponentsToAuthPanel() {
+        authPanel.add(usernameLabel);
+        authPanel.add(usernameTextField);
         authPanel.add(exitButton);
         authPanel.add(enterButton);
     }
 
     private void configureAuthPanelComponents() {
+        usernameLabel.setFont(WindowUtils.getTextFont());
         enterButton.setFont(WindowUtils.getTextFont());
         exitButton.setFont(WindowUtils.getTextFont());
     }
 
     private void addListeners() {
-        enterButton.addActionListener(e -> {
-            // TODO: 5/31/20 handle client entering
-            clientService.createUniqueID();
-            showMainPanel();
-        });
+        enterButton.addActionListener(e -> showMainPanel());
         exitButton.addActionListener(e -> MainWindow.this
             .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
         orderButton.addActionListener(e -> {
@@ -200,7 +207,7 @@ public class MainWindow extends JFrame {
     private void addComponentsToOrderPanel() {
         orderPanel.add(orderLabel, BorderLayout.NORTH);
         orderPanel.add(orderScrollPane, BorderLayout.CENTER);
-        orderPanel.add(new JPanel(), BorderLayout.SOUTH);
+        orderPanel.add(usernameButton, BorderLayout.SOUTH);
     }
 
     private void addComponentsToMainPanel() {
@@ -218,6 +225,8 @@ public class MainWindow extends JFrame {
 
     private void configureButtons() {
         orderButton.setFont(WindowUtils.getHeaderFont());
+        usernameButton.setFont(WindowUtils.getHeaderFont());
+        usernameButton.setEnabled(false);
     }
 
     private void configureLabels() {
@@ -265,7 +274,9 @@ public class MainWindow extends JFrame {
 
     private void showAuthPanel() {
         clientId = null;
+        clientName = null;
         orderTableModel.removeAllRows();
+        usernameButton.setText("");
 
         JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
         contentPane.removeAll();
@@ -280,6 +291,8 @@ public class MainWindow extends JFrame {
 
     private void showMainPanel() {
         clientId = clientService.createUniqueID();
+        clientName = usernameTextField.getText();
+        usernameButton.setText("Client: " + clientName);
 
         JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
         contentPane.removeAll();

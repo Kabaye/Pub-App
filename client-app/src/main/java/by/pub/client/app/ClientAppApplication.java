@@ -1,6 +1,6 @@
 package by.pub.client.app;
 
-import by.pub.client.app.ui.MainWindow;
+import by.pub.client.app.ui.frame.MainWindow;
 import java.awt.EventQueue;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

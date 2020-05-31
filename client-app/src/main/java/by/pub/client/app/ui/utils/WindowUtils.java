@@ -15,7 +15,7 @@ public class WindowUtils {
     private static final Font[] TEXT_FONT = new Font[]{new Font("Serif", Font.PLAIN, 20),
         new Font("Serif", Font.PLAIN, 20)};
     private static final Color MENU_BAR_COLOR = Color.CYAN;
-    private static final int[] SCREEN_WIDTH = new int[]{1000, 1000};
+    private static final int[] SCREEN_WIDTH = new int[]{800, 800};
     private static final int[] SCREEN_HEIGHT = new int[]{600, 600};
     //order info dialog
     private static final Font[] INFO_DIALOG_HEADER_FONT = new Font[]{
@@ -69,7 +69,7 @@ public class WindowUtils {
         infoDialogScreenHeight = INFO_DIALOG_SCREEN_HEIGHT[sys];
 
         authScreenWidth = screenWidth / 4;
-        authScreenHeight = screenHeight / 5;
+        authScreenHeight = screenHeight / 7;
     }
 
     private WindowUtils() {
