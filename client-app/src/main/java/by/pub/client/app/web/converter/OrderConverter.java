@@ -17,7 +17,7 @@ public class OrderConverter {
 
     public Order toEntity(OrderDTO orderDTO) {
         return new Order().setClientId(orderDTO.getClientId())
-                .setProducts(orderDTO.getProductDTOs().stream()
+                .setProducts(orderDTO.getProducts().stream()
                         .map(productConverter::toEntity)
                         .collect(Collectors.toList()))
                 .setStatus(Status.valueOf(orderDTO.getStatus()))
@@ -27,7 +27,7 @@ public class OrderConverter {
 
     public OrderDTO toDTO(Order order) {
         return new OrderDTO().setClientId(order.getClientId())
-                .setProductDTOs(order.getProducts().stream()
+                .setProducts(order.getProducts().stream()
                         .map(productConverter::toDTO)
                         .collect(Collectors.toList()));
     }

@@ -4,6 +4,7 @@ import by.pub.client.app.service.ClientService;
 import by.pub.client.app.web.converter.OrderConverter;
 import by.pub.client.app.web.dto.OrderDTO;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class ClientController {
     }
 
     @PostMapping("/accept-order")
-    public void handleAcceptedOrder(OrderDTO acceptedOrderDTO) {
+    public void handleAcceptedOrder(@RequestBody OrderDTO acceptedOrderDTO) {
         clientService.handleAcceptedOrder(orderConverter.toEntity(acceptedOrderDTO));
     }
 }

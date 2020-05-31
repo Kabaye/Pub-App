@@ -2,8 +2,13 @@ package by.pub.bar.app.web.client.web_client;
 
 import by.pub.bar.app.element.order.entity.Order;
 import by.pub.bar.app.web.client.converter.OrderConverter;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.Executors;
 
 @Component
 public class WebClientImpl implements WebClient {
@@ -15,14 +20,14 @@ public class WebClientImpl implements WebClient {
         this.restTemplate = new RestTemplate();
     }
 
-    //TODO 31.05.2020 send in new thread. check why sent is good, received is null on client side.
     @Override
     public void sendAcceptedOrder(Order order) {
-       /* restTemplate.exchange(
+        final Runnable runnable = () -> restTemplate.exchange(
                 "http://localhost:9892/api/v1/clients/accept-order",
                 HttpMethod.POST,
                 new HttpEntity<>(orderConverter.toDTO(order)),
-                new ParameterizedTypeReference<>() {
-                });*/
+                new ParameterizedTypeReference<Void>() {
+                });
+        Executors.newSingleThreadExecutor().submit(runnable);
     }
 }

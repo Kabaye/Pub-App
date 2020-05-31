@@ -80,6 +80,7 @@
     <modules>
         <module>storage-app</module>
         <module>bar-app</module>
+        <module>client-app</module>
     </modules>
 
 </project>

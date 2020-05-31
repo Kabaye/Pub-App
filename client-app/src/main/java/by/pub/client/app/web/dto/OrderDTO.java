@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class OrderDTO {
-    private List<ProductDTO> productDTOs;
+    private List<ProductDTO> products;
     private String clientId;
     private Double totalPrice = 0D;
     private String status;
