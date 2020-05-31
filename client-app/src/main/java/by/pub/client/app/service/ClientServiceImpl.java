@@ -7,11 +7,10 @@ import by.pub.client.app.product.entity.Product;
 import by.pub.client.app.web.converter.OrderConverter;
 import by.pub.client.app.web.converter.ProductConverter;
 import by.pub.client.app.web.web_client.WebClient;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -42,7 +41,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void handleAcceptedOrder(Order order) {
-        System.out.println(order);
         publisher.publishEvent(new ReceivedAcceptedOrderEvent().setOrder(order));
     }
 
