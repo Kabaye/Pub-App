@@ -168,7 +168,15 @@ public class MainWindow extends JFrame {
     }
 
     private void addListeners() {
-        enterButton.addActionListener(e -> showMainPanel());
+        enterButton.addActionListener(e -> {
+            if (usernameTextField.getText().compareTo("") != 0) {
+                showMainPanel();
+            } else {
+                JOptionPane.showMessageDialog(MainWindow.this,
+                    "Please, type your name in", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+
+        });
         exitButton.addActionListener(e -> MainWindow.this
             .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
         orderButton.addActionListener(e -> {
