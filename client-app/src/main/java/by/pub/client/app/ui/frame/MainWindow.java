@@ -277,6 +277,7 @@ public class MainWindow extends JFrame {
         clientName = null;
         orderTableModel.removeAllRows();
         usernameButton.setText("");
+        usernameTextField.setText("");
 
         JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
         contentPane.removeAll();
@@ -309,8 +310,10 @@ public class MainWindow extends JFrame {
     @EventListener
     public void handleAcceptedOrderReceiving(
         ReceivedAcceptedOrderEvent receivedAcceptedOrderEvent) {
-        orderTableModel.removeRow(receivedAcceptedOrderEvent.getOrder());
-        orderTableModel.addRow(receivedAcceptedOrderEvent.getOrder());
+        if (receivedAcceptedOrderEvent.getOrder().getClientId().compareTo(clientId) == 0) {
+            orderTableModel.removeRow(receivedAcceptedOrderEvent.getOrder());
+            orderTableModel.addRow(receivedAcceptedOrderEvent.getOrder());
+        }
     }
 
 }

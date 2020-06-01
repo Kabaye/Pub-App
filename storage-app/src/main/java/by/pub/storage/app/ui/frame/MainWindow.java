@@ -99,7 +99,7 @@ public class MainWindow extends JFrame {
         passwordTextField = new JPasswordField();
         logInButton = new JButton("Log in");
         exitButton = new JButton("Exit");
-        passwordCheckBox = new JCheckBox("Show pass", false);
+        passwordCheckBox = new JCheckBox("Show pass");
         addComponentsToAuthPanel();
         configureAuthPanelComponents();
         //mainPanel
@@ -311,6 +311,10 @@ public class MainWindow extends JFrame {
     }
 
     private void showAuthPanel() {
+        passwordCheckBox.setSelected(false);
+        passwordTextField.setText("");
+        usernameTextField.setText("");
+
         JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
         contentPane.removeAll();
         contentPane.setLayout(new BorderLayout());
