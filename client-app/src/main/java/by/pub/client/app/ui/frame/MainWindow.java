@@ -4,6 +4,7 @@ import by.pub.client.app.event.entity.ReceivedAcceptedOrderEvent;
 import by.pub.client.app.order.entity.Order;
 import by.pub.client.app.product.entity.Product;
 import by.pub.client.app.service.ClientService;
+import by.pub.client.app.ui.config.WindowConfig;
 import by.pub.client.app.ui.dialog.OrderInfoDialog;
 import by.pub.client.app.ui.renderer.OrderStatusRenderer;
 import by.pub.client.app.ui.renderer.OrderTextRenderer;
@@ -11,15 +12,10 @@ import by.pub.client.app.ui.table.OrderTable;
 import by.pub.client.app.ui.table.ProductTable;
 import by.pub.client.app.ui.table_model.OrderTableModel;
 import by.pub.client.app.ui.table_model.ProductTableModel;
-import by.pub.client.app.ui.utils.WindowUtils;
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import by.pub.client.app.utils.ResourceLoader;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,8 +32,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 
 @Component
 public class MainWindow extends JFrame {
@@ -72,13 +74,14 @@ public class MainWindow extends JFrame {
     private String clientId;
     private String clientName;
 
-    public MainWindow(
-        ProductTableModel productTableModel,
-        OrderTableModel orderTableModel,
-        ClientService clientService) {
+    private final String appVersion;
+
+    public MainWindow(ProductTableModel productTableModel, OrderTableModel orderTableModel, ClientService clientService,
+                      String appVersion) {
         this.productTableModel = productTableModel;
         this.orderTableModel = orderTableModel;
         this.clientService = clientService;
+        this.appVersion = appVersion;
         //authPanel
         authPanel = new JPanel(new GridLayout(2, 2, 1, 0));
         enterButton = new JButton("Enter bar");
@@ -109,7 +112,7 @@ public class MainWindow extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(WindowUtils.getMenuBarColor());
+                g2d.setColor(WindowConfig.getMenuBarColor());
                 g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
             }
         };
@@ -132,8 +135,8 @@ public class MainWindow extends JFrame {
         clearOrderItem.addActionListener(e -> {
             if (orderTableModel.removeAcceptedRows() == 0) {
                 JOptionPane
-                    .showMessageDialog(MainWindow.this,
-                        "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
+                        .showMessageDialog(MainWindow.this,
+                                "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -162,9 +165,9 @@ public class MainWindow extends JFrame {
     }
 
     private void configureAuthPanelComponents() {
-        usernameLabel.setFont(WindowUtils.getTextFont());
-        enterButton.setFont(WindowUtils.getTextFont());
-        exitButton.setFont(WindowUtils.getTextFont());
+        usernameLabel.setFont(WindowConfig.getTextFont());
+        enterButton.setFont(WindowConfig.getTextFont());
+        exitButton.setFont(WindowConfig.getTextFont());
     }
 
     private void addListeners() {
@@ -185,11 +188,11 @@ public class MainWindow extends JFrame {
             Order order;
             if (selectedRows.length > 0) {
                 order = clientService
-                    .requestOrder(clientId, productTableModel.getValues(selectedRows));
+                        .requestOrder(clientId, productTableModel.getValues(selectedRows));
                 orderTableModel.addRow(order);
             } else {
                 JOptionPane.showMessageDialog(MainWindow.this,
-                    "Please, select products", "Warning", JOptionPane.WARNING_MESSAGE);
+                        "Please, select products", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
         orderTable.addMouseListener(new MouseAdapter() {
@@ -199,7 +202,7 @@ public class MainWindow extends JFrame {
                 int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     OrderInfoDialog infoDialog = new OrderInfoDialog(
-                        orderTableModel.getValueAt(row));
+                            orderTableModel.getValueAt(row));
                     infoDialog.setVisible(true);
                 }
             }
@@ -232,15 +235,15 @@ public class MainWindow extends JFrame {
     }
 
     private void configureButtons() {
-        orderButton.setFont(WindowUtils.getHeaderFont());
-        usernameButton.setFont(WindowUtils.getHeaderFont());
+        orderButton.setFont(WindowConfig.getHeaderFont());
+        usernameButton.setFont(WindowConfig.getHeaderFont());
         usernameButton.setEnabled(false);
     }
 
     private void configureLabels() {
-        orderLabel.setFont(WindowUtils.getHeaderFont());
+        orderLabel.setFont(WindowConfig.getHeaderFont());
         orderLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        productLabel.setFont(WindowUtils.getHeaderFont());
+        productLabel.setFont(WindowConfig.getHeaderFont());
         productLabel.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
@@ -248,23 +251,23 @@ public class MainWindow extends JFrame {
         productTable.setFillsViewportHeight(true);
         for (int i = 0; i < productTable.getColumnCount(); i++) {
             productTable.getColumnModel().getColumn(i)
-                .setCellRenderer(new OrderTextRenderer());
+                    .setCellRenderer(new OrderTextRenderer());
         }
         orderTable.setFillsViewportHeight(true);
         for (int i = 0; i < orderTable.getColumnCount() - 1; i++) {
             orderTable.getColumnModel().getColumn(i)
-                .setCellRenderer(new OrderTextRenderer());
+                    .setCellRenderer(new OrderTextRenderer());
         }
         orderTable.getColumnModel()
-            .getColumn(orderTable.getColumnCount() - 1)
-            .setCellRenderer(new OrderStatusRenderer());
+                .getColumn(orderTable.getColumnCount() - 1)
+                .setCellRenderer(new OrderStatusRenderer());
         orderTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void configureScrollPanes() {
         orderScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         productScrollPane
-            .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
 
     private void configurePanels() {
@@ -273,19 +276,19 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
-        setTitle("Client's menu");
         showAuthPanel();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-//        pack();
     }
 
     private void showAuthPanel() {
+        setTitle("Who are you?");
+        setIconImage(ResourceLoader.getImage("icon/who-are-you.png"));
+
         clientId = null;
         clientName = null;
         orderTableModel.removeAllRows();
         usernameButton.setText("");
-        usernameTextField.setText("");
 
         JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
         contentPane.removeAll();
@@ -295,10 +298,13 @@ public class MainWindow extends JFrame {
         contentPane.repaint();
 
         menuBar.setVisible(false);
-        setBounds(0, 0, WindowUtils.getAuthScreenWidth(), WindowUtils.getAuthScreenHeight());
+        setBounds(0, 0, WindowConfig.getAuthScreenWidth(), WindowConfig.getAuthScreenHeight());
     }
 
     private void showMainPanel() {
+        setTitle("Client app " + appVersion);
+        setIconImage(ResourceLoader.getImage("icon/client.png"));
+
         clientId = clientService.createUniqueID();
         clientName = usernameTextField.getText();
         usernameButton.setText("Client: " + clientName);
@@ -312,7 +318,7 @@ public class MainWindow extends JFrame {
 
         menuBar.setVisible(true);
         MainWindow.this
-            .setBounds(0, 0, WindowUtils.getScreenWidth(), WindowUtils.getScreenHeight());
+                .setBounds(0, 0, WindowConfig.getScreenWidth(), WindowConfig.getScreenHeight());
     }
 
     @EventListener

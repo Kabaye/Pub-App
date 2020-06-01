@@ -3,11 +3,9 @@ package by.pub.bar.app.ui.dialog;
 import by.pub.bar.app.element.ingredient.entity.Ingredient;
 import by.pub.bar.app.element.order.entity.Order;
 import by.pub.bar.app.element.product.entity.Product;
-import by.pub.bar.app.ui.utils.WindowUtils;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
+import by.pub.bar.app.ui.config.WindowConfig;
+import by.pub.bar.app.utils.ResourceLoader;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -15,11 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 
 public class OrderInfoDialog extends JDialog {
 
-    private static final Object[] INFO_TABLE_HEADER = new String[]{"Product", "Price", "Ingredient",
-        "Amount"};
+    private static final Object[] INFO_TABLE_HEADER = new String[]{"Product", "Price", "Ingredient", "Amount"};
 
     private final JPanel mainPanel;
     private final JPanel infoPanel;
@@ -55,24 +56,22 @@ public class OrderInfoDialog extends JDialog {
 
     private void configureComponents() {
         infoTable.setFillsViewportHeight(true);
-        infoTable.setPreferredScrollableViewportSize(
-            new Dimension(WindowUtils.getInfoDialogScreenWidth(),
-                WindowUtils.getInfoDialogScreenHeight()));
-        infoTable.setFont(WindowUtils.getInfoDialogTextFontFont());
+        infoTable.setPreferredScrollableViewportSize(new Dimension(WindowConfig.getInfoDialogScreenWidth(),
+                WindowConfig.getInfoDialogScreenHeight()));
+        infoTable.setFont(WindowConfig.getInfoDialogTextFontFont());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(new Rectangle(WindowUtils.getInfoDialogScreenWidth(),
-            WindowUtils.getInfoDialogScreenHeight()));
-        orderIdLabel.setFont(WindowUtils.getInfoDialogHeaderFont());
-        priceLabel.setFont(WindowUtils.getInfoDialogHeaderFont());
-        cancelButton.setFont(WindowUtils.getInfoDialogHeaderFont());
+        scrollPane.setBounds(new Rectangle(WindowConfig.getInfoDialogScreenWidth(),
+                WindowConfig.getInfoDialogScreenHeight()));
+        orderIdLabel.setFont(WindowConfig.getInfoDialogHeaderFont());
+        priceLabel.setFont(WindowConfig.getInfoDialogHeaderFont());
+        cancelButton.setFont(WindowConfig.getInfoDialogHeaderFont());
     }
 
     private void addData() {
         for (Product product : order.getProducts()) {
             model.addRow(new Object[]{product.getName(), product.getPrice(), "", ""});
             for (Ingredient simpleIngredient : product.getUsedIngredients()) {
-                model.addRow(
-                    new Object[]{"", "", simpleIngredient.getName(), simpleIngredient.getAmount()});
+                model.addRow(new Object[]{"", "", simpleIngredient.getName(), simpleIngredient.getAmount()});
             }
         }
     }
@@ -86,9 +85,10 @@ public class OrderInfoDialog extends JDialog {
     }
 
     private void setWindowPreferences() {
-        setTitle("Order info");
+        setTitle("Order information");
+        setIconImage(ResourceLoader.getImage("icon/order-info.png"));
+
         setContentPane(mainPanel);
-//        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setResizable(false);
         pack();
     }

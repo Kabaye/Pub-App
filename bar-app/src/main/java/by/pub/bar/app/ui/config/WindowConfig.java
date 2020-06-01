@@ -1,37 +1,38 @@
-package by.pub.bar.app.ui.utils;
+package by.pub.bar.app.ui.config;
+
+import lombok.Getter;
 
 import java.awt.Color;
 import java.awt.Font;
-import lombok.Getter;
 
-public class WindowUtils {
+public class WindowConfig {
 
     private static final int MAC_OS_X = 0;
     private static final int WINDOWS = 1;
 
     //main window
     private static final Font[] HEADER_FONT = new Font[]{new Font("Serif", Font.PLAIN, 30),
-        new Font("Serif", Font.PLAIN, 30)};
+            new Font("Serif", Font.PLAIN, 30)};
     private static final Font[] TEXT_FONT = new Font[]{new Font("Serif", Font.PLAIN, 20),
-        new Font("Serif", Font.PLAIN, 20)};
+            new Font("Serif", Font.PLAIN, 20)};
     private static final Color MENU_BAR_COLOR = Color.ORANGE;
     private static final Color UPPER_LABEL_COLOR = Color.ORANGE;
-    private static final int[] SCREEN_WIDTH = new int[]{1000, 1000};
-    private static final int[] SCREEN_HEIGHT = new int[]{600, 600};
+    private static final int[] SCREEN_WIDTH = new int[]{1000, 1500};
+    private static final int[] SCREEN_HEIGHT = new int[]{600, 900};
     //request store keeper dialog
     private static final Font[] DIALOG_HEADER_FONT = new Font[]{new Font("Serif", Font.PLAIN, 15),
-        new Font("Serif", Font.PLAIN, 15)};
-    private static final int[] DIALOG_SCREEN_WIDTH = {250, 250};
-    private static final int[] DIALOG_SCREEN_HEIGHT = {100, 100};
+            new Font("Serif", Font.PLAIN, 15)};
+    private static final int[] DIALOG_SCREEN_WIDTH = {250, 350};
+    private static final int[] DIALOG_SCREEN_HEIGHT = {100, 150};
     //order info dialog
     private static final Font[] INFO_DIALOG_HEADER_FONT = new Font[]{
-        new Font("Serif", Font.PLAIN, 20), new Font("Serif", Font.PLAIN, 20)
+            new Font("Serif", Font.PLAIN, 20), new Font("Serif", Font.PLAIN, 20)
     };
     private static final Font[] INFO_DIALOG_TEXT_FONT = new Font[]{
-        new Font("Serif", Font.PLAIN, 15), new Font("Serif", Font.PLAIN, 15)
+            new Font("Serif", Font.PLAIN, 15), new Font("Serif", Font.PLAIN, 15)
     };
-    private static final int[] INFO_DIALOG_SCREEN_WIDTH = {400, 400};
-    private static final int[] INFO_DIALOG_SCREEN_HEIGHT = {200, 200};
+    private static final int[] INFO_DIALOG_SCREEN_WIDTH = {400, 500};
+    private static final int[] INFO_DIALOG_SCREEN_HEIGHT = {200, 250};
 
     private static final int sys;
     @Getter
@@ -90,7 +91,7 @@ public class WindowUtils {
         authScreenHeight = screenHeight / 5;
     }
 
-    private WindowUtils() {
+    private WindowConfig() {
     }
 
 

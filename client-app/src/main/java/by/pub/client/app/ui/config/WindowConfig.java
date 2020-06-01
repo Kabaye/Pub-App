@@ -1,31 +1,32 @@
-package by.pub.client.app.ui.utils;
+package by.pub.client.app.ui.config;
+
+import lombok.Getter;
 
 import java.awt.Color;
 import java.awt.Font;
-import lombok.Getter;
 
-public class WindowUtils {
+public class WindowConfig {
 
     private static final int MAC_OS_X = 0;
     private static final int WINDOWS = 1;
 
     //main window
     private static final Font[] HEADER_FONT = new Font[]{new Font("Serif", Font.PLAIN, 30),
-        new Font("Serif", Font.PLAIN, 30)};
+            new Font("Serif", Font.PLAIN, 30)};
     private static final Font[] TEXT_FONT = new Font[]{new Font("Serif", Font.PLAIN, 20),
-        new Font("Serif", Font.PLAIN, 20)};
+            new Font("Serif", Font.PLAIN, 20)};
     private static final Color MENU_BAR_COLOR = Color.CYAN;
-    private static final int[] SCREEN_WIDTH = new int[]{800, 800};
-    private static final int[] SCREEN_HEIGHT = new int[]{600, 600};
+    private static final int[] SCREEN_WIDTH = new int[]{800, 1000};
+    private static final int[] SCREEN_HEIGHT = new int[]{600, 800};
     //order info dialog
     private static final Font[] INFO_DIALOG_HEADER_FONT = new Font[]{
-        new Font("Serif", Font.PLAIN, 20), new Font("Serif", Font.PLAIN, 20)
+            new Font("Serif", Font.PLAIN, 20), new Font("Serif", Font.PLAIN, 20)
     };
     private static final Font[] INFO_DIALOG_TEXT_FONT = new Font[]{
-        new Font("Serif", Font.PLAIN, 15), new Font("Serif", Font.PLAIN, 15)
+            new Font("Serif", Font.PLAIN, 15), new Font("Serif", Font.PLAIN, 15)
     };
-    private static final int[] INFO_DIALOG_SCREEN_WIDTH = {400, 400};
-    private static final int[] INFO_DIALOG_SCREEN_HEIGHT = {200, 200};
+    private static final int[] INFO_DIALOG_SCREEN_WIDTH = {400, 600};
+    private static final int[] INFO_DIALOG_SCREEN_HEIGHT = {200, 300};
 
     private static final int sys;
     @Getter
@@ -72,7 +73,7 @@ public class WindowUtils {
         authScreenHeight = screenHeight / 7;
     }
 
-    private WindowUtils() {
+    private WindowConfig() {
     }
 
 

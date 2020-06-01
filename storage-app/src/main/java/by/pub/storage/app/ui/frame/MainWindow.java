@@ -8,6 +8,7 @@ import by.pub.storage.app.element.ingredient_request.service.IngredientRequestSe
 import by.pub.storage.app.event.entity.IngredientChangedEvent;
 import by.pub.storage.app.event.entity.NewIngredientRequestEvent;
 import by.pub.storage.app.security.service.CredentialsService;
+import by.pub.storage.app.ui.config.WindowConfig;
 import by.pub.storage.app.ui.dialog.RequestProviderDialog;
 import by.pub.storage.app.ui.renderer.IngredientRequestStatusRenderer;
 import by.pub.storage.app.ui.renderer.IngredientRequestTextRenderer;
@@ -15,12 +16,10 @@ import by.pub.storage.app.ui.table.IngredientRequestTable;
 import by.pub.storage.app.ui.table.IngredientTable;
 import by.pub.storage.app.ui.table_model.IngredientRequestTableModel;
 import by.pub.storage.app.ui.table_model.IngredientTableModel;
-import by.pub.storage.app.ui.utils.WindowUtils;
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.event.WindowEvent;
+import by.pub.storage.app.utils.ResourceLoader;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -39,8 +38,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 
 @Component
 public class MainWindow extends JFrame {
@@ -71,6 +73,7 @@ public class MainWindow extends JFrame {
     private final IngredientRequestService ingredientRequestService;
     private final CredentialsService credentialsService;
     private final RequestProviderDialog requestProviderDialog;
+    private final String appVersion;
 
     private final JMenuBar menuBar;
     private final JMenu userMenu;
@@ -78,19 +81,16 @@ public class MainWindow extends JFrame {
     private final JMenuItem signOutItem;
     private final JMenuItem clearRequestItem;
 
-    public MainWindow(
-        IngredientTableModel ingredientTableModel,
-        IngredientRequestTableModel ingredientRequestTableModel,
-        IngredientService ingredientService,
-        IngredientRequestService ingredientRequestService,
-        CredentialsService credentialsService,
-        RequestProviderDialog requestProviderDialog) {
+    public MainWindow(IngredientTableModel ingredientTableModel, IngredientRequestTableModel ingredientRequestTableModel,
+                      IngredientService ingredientService, IngredientRequestService ingredientRequestService,
+                      CredentialsService credentialsService, RequestProviderDialog requestProviderDialog, String appVersion) {
         this.ingredientTableModel = ingredientTableModel;
         this.ingredientRequestTableModel = ingredientRequestTableModel;
         this.ingredientService = ingredientService;
         this.ingredientRequestService = ingredientRequestService;
         this.credentialsService = credentialsService;
         this.requestProviderDialog = requestProviderDialog;
+        this.appVersion = appVersion;
         //authPanel
         authPanel = new JPanel(new GridLayout(4, 2, 1, 0));
         usernameLabel = new JLabel("Username", JLabel.CENTER);
@@ -124,7 +124,7 @@ public class MainWindow extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(WindowUtils.getMenuBarColor());
+                g2d.setColor(WindowConfig.getMenuBarColor());
                 g2d.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
             }
         };
@@ -147,8 +147,8 @@ public class MainWindow extends JFrame {
         clearRequestItem.addActionListener(e -> {
             if (ingredientRequestTableModel.removeAcceptedRows() == 0) {
                 JOptionPane
-                    .showMessageDialog(MainWindow.this,
-                        "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
+                        .showMessageDialog(MainWindow.this,
+                                "Nothing to clear", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
     }
@@ -165,7 +165,7 @@ public class MainWindow extends JFrame {
 
     private void loadDataToModels() {
         for (IngredientRequest ingredientRequest : ingredientRequestService
-            .findAllIngredientRequests()) {
+                .findAllIngredientRequests()) {
             ingredientRequestTableModel.addRow(ingredientRequest);
         }
         for (Ingredient ingredient : ingredientService.findAllIngredients()) {
@@ -185,10 +185,10 @@ public class MainWindow extends JFrame {
     }
 
     private void configureAuthPanelComponents() {
-        usernameLabel.setFont(WindowUtils.getTextFont());
-        passwordLabel.setFont(WindowUtils.getTextFont());
-        logInButton.setFont(WindowUtils.getTextFont());
-        exitButton.setFont(WindowUtils.getTextFont());
+        usernameLabel.setFont(WindowConfig.getTextFont());
+        passwordLabel.setFont(WindowConfig.getTextFont());
+        logInButton.setFont(WindowConfig.getTextFont());
+        exitButton.setFont(WindowConfig.getTextFont());
         passwordTextField.setEchoChar('*');
     }
 
@@ -202,16 +202,16 @@ public class MainWindow extends JFrame {
         });
         logInButton.addActionListener(e -> {
             if (credentialsService
-                .checkCredentials(usernameTextField.getText(),
-                    new String(passwordTextField.getPassword()))) {
+                    .checkCredentials(usernameTextField.getText(),
+                            new String(passwordTextField.getPassword()))) {
                 showMainPanel();
             } else {
                 JOptionPane.showMessageDialog(MainWindow.this,
-                    "Invalid login and password", "Warning", JOptionPane.WARNING_MESSAGE);
+                        "Invalid login and password", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         });
         exitButton.addActionListener(e -> MainWindow.this
-            .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
+                .dispatchEvent(new WindowEvent(MainWindow.this, WindowEvent.WINDOW_CLOSING)));
         fulfillButton.addActionListener(e -> {
             ListSelectionModel selectionModel = ingredientRequestTable.getSelectionModel();
             int index = selectionModel.getMinSelectionIndex();
@@ -221,16 +221,16 @@ public class MainWindow extends JFrame {
                 if (ingredientRequest.getStatus().equals(IngredientRequestStatus.NOT_ACCEPTED)) {
                     try {
                         ingredientRequest = ingredientRequestService
-                            .acceptIngredientRequest(ingredientRequest);
+                                .acceptIngredientRequest(ingredientRequest);
                         ingredientRequestTableModel.removeRow(index);
                         ingredientRequestTableModel.addRow(ingredientRequest);
                     } catch (RuntimeException exception) {
                         JOptionPane.showMessageDialog(MainWindow.this,
-                            exception.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+                                exception.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(MainWindow.this,
-                        "Request is already accepted", "Warning", JOptionPane.WARNING_MESSAGE);
+                            "Request is already accepted", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -263,14 +263,14 @@ public class MainWindow extends JFrame {
     }
 
     private void configureButtons() {
-        fulfillButton.setFont(WindowUtils.getHeaderFont());
-        ingredientRequestButton.setFont(WindowUtils.getHeaderFont());
+        fulfillButton.setFont(WindowConfig.getHeaderFont());
+        ingredientRequestButton.setFont(WindowConfig.getHeaderFont());
     }
 
     private void configureLabels() {
-        ingredientLabel.setFont(WindowUtils.getHeaderFont());
+        ingredientLabel.setFont(WindowConfig.getHeaderFont());
         ingredientLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        ingredientRequestLabel.setFont(WindowUtils.getHeaderFont());
+        ingredientRequestLabel.setFont(WindowConfig.getHeaderFont());
         ingredientRequestLabel.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
@@ -278,23 +278,23 @@ public class MainWindow extends JFrame {
         ingredientTable.setFillsViewportHeight(true);
         for (int i = 0; i < ingredientTable.getColumnCount(); i++) {
             ingredientTable.getColumnModel().getColumn(i)
-                .setCellRenderer(new IngredientRequestTextRenderer());
+                    .setCellRenderer(new IngredientRequestTextRenderer());
         }
         ingredientRequestTable.setFillsViewportHeight(true);
         for (int i = 0; i < ingredientRequestTable.getColumnCount() - 1; i++) {
             ingredientRequestTable.getColumnModel().getColumn(i)
-                .setCellRenderer(new IngredientRequestTextRenderer());
+                    .setCellRenderer(new IngredientRequestTextRenderer());
         }
         ingredientRequestTable.getColumnModel()
-            .getColumn(ingredientRequestTable.getColumnCount() - 1)
-            .setCellRenderer(new IngredientRequestStatusRenderer());
+                .getColumn(ingredientRequestTable.getColumnCount() - 1)
+                .setCellRenderer(new IngredientRequestStatusRenderer());
         ingredientRequestTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void configureScrollPanes() {
         ingredientScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         ingredientRequestScrollPane
-            .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     }
 
     private void configurePanels() {
@@ -303,7 +303,6 @@ public class MainWindow extends JFrame {
     }
 
     private void setWindowPreferences() {
-        setTitle("Storage handler");
         showAuthPanel();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -311,6 +310,9 @@ public class MainWindow extends JFrame {
     }
 
     private void showAuthPanel() {
+        setTitle("Storage log in");
+        setIconImage(ResourceLoader.getImage("icon/authentication.png"));
+
         passwordCheckBox.setSelected(false);
         passwordTextField.setText("");
         usernameTextField.setText("");
@@ -323,11 +325,14 @@ public class MainWindow extends JFrame {
         contentPane.repaint();
 
         menuBar.setVisible(false);
-        setBounds(0, 0, WindowUtils.getAuthScreenWidth(), WindowUtils.getAuthScreenHeight());
+        setBounds(0, 0, WindowConfig.getAuthScreenWidth(), WindowConfig.getAuthScreenHeight());
     }
 
     private void showMainPanel() {
-        JComponent contentPane = (JPanel) MainWindow.this.getContentPane();
+        setTitle("Storage app " + appVersion);
+        setIconImage(ResourceLoader.getImage("icon/storage.png"));
+
+        JComponent contentPane = (JPanel) getContentPane();
         contentPane.removeAll();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(mainPanel, BorderLayout.CENTER);
@@ -335,8 +340,7 @@ public class MainWindow extends JFrame {
         contentPane.repaint();
 
         menuBar.setVisible(true);
-        MainWindow.this
-            .setBounds(0, 0, WindowUtils.getScreenWidth(), WindowUtils.getScreenHeight());
+        setBounds(0, 0, WindowConfig.getScreenWidth(), WindowConfig.getScreenHeight());
     }
 
     @EventListener

@@ -2,12 +2,11 @@ package by.pub.storage.app.ui.dialog;
 
 import by.pub.storage.app.element.ingredient.entity.Ingredient;
 import by.pub.storage.app.element.ingredient.service.IngredientService;
+import by.pub.storage.app.ui.config.WindowConfig;
 import by.pub.storage.app.ui.table_model.IngredientTableModel;
-import by.pub.storage.app.ui.utils.WindowUtils;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import by.pub.storage.app.utils.ResourceLoader;
+import org.springframework.stereotype.Component;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,7 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import org.springframework.stereotype.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 @Component
 public class RequestProviderDialog extends JDialog {
@@ -37,12 +39,13 @@ public class RequestProviderDialog extends JDialog {
     private final IngredientService ingredientService;
     private final IngredientTableModel ingredientTableModel;
 
-    public RequestProviderDialog(
-        IngredientService ingredientService,
-        IngredientTableModel ingredientTableModel) {
+    private final String appVersion;
+
+    public RequestProviderDialog(IngredientService ingredientService, IngredientTableModel ingredientTableModel, String appVersion) {
         super((JFrame) null, "Request for ingredients");
         this.ingredientService = ingredientService;
         this.ingredientTableModel = ingredientTableModel;
+        this.appVersion = appVersion;
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -72,14 +75,14 @@ public class RequestProviderDialog extends JDialog {
                     ingredient = ingredientService.orderIngredient(name, amount);
                 } catch (RuntimeException exception) {
                     ingredient = ingredientService
-                        .saveIngredient(new Ingredient().setName(name).setAmount(amount));
+                            .saveIngredient(new Ingredient().setName(name).setAmount(amount));
                 }
                 ingredientTableModel.removeRow(ingredient);
                 ingredientTableModel.addRow(ingredient);
             } catch (Exception exception) {
                 JOptionPane
-                    .showMessageDialog(RequestProviderDialog.this,
-                        exception.getMessage());
+                        .showMessageDialog(RequestProviderDialog.this,
+                                exception.getMessage());
             }
         });
         cancelButton.addActionListener(e -> setVisible(false));
@@ -103,20 +106,21 @@ public class RequestProviderDialog extends JDialog {
         lowerPanel.setBorder(BorderFactory.createBevelBorder(1));
         upperPanel.setBackground(UPPER_PANEL_COLOR);
         //labels configuration
-        nameLabel.setFont(WindowUtils.getDialogHeaderFont());
+        nameLabel.setFont(WindowConfig.getDialogHeaderFont());
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        amountLabel.setFont(WindowUtils.getDialogHeaderFont());
+        amountLabel.setFont(WindowConfig.getDialogHeaderFont());
         amountLabel.setHorizontalAlignment(SwingConstants.CENTER);
         //buttons configuration
-        requestButton.setFont(WindowUtils.getDialogHeaderFont());
-        cancelButton.setFont(WindowUtils.getDialogHeaderFont());
+        requestButton.setFont(WindowConfig.getDialogHeaderFont());
+        cancelButton.setFont(WindowConfig.getDialogHeaderFont());
     }
 
     private void setWindowPreferences() {
-        setTitle("Storage: Ingredients handler");
+        setTitle("Storage ingredient ordering system " + appVersion);
+        setIconImage(ResourceLoader.getImage("icon/provider.png"));
         setContentPane(mainPanel);
         setPreferredSize(
-            new Dimension(WindowUtils.getDialogScreenWidth(), WindowUtils.getDialogScreenHeight()));
+                new Dimension(WindowConfig.getDialogScreenWidth(), WindowConfig.getDialogScreenHeight()));
         setResizable(false);
         pack();
     }

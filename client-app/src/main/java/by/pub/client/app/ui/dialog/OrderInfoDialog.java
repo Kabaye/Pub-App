@@ -2,11 +2,9 @@ package by.pub.client.app.ui.dialog;
 
 import by.pub.client.app.order.entity.Order;
 import by.pub.client.app.product.entity.Product;
-import by.pub.client.app.ui.utils.WindowUtils;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
+import by.pub.client.app.ui.config.WindowConfig;
+import by.pub.client.app.utils.ResourceLoader;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -14,6 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 
 public class OrderInfoDialog extends JDialog {
 
@@ -52,14 +54,14 @@ public class OrderInfoDialog extends JDialog {
     private void configureComponents() {
         infoTable.setFillsViewportHeight(true);
         infoTable.setPreferredScrollableViewportSize(
-            new Dimension(WindowUtils.getInfoDialogScreenWidth(),
-                WindowUtils.getInfoDialogScreenHeight()));
-        infoTable.setFont(WindowUtils.getInfoDialogTextFontFont());
+                new Dimension(WindowConfig.getInfoDialogScreenWidth(),
+                        WindowConfig.getInfoDialogScreenHeight()));
+        infoTable.setFont(WindowConfig.getInfoDialogTextFontFont());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(new Rectangle(WindowUtils.getInfoDialogScreenWidth(),
-            WindowUtils.getInfoDialogScreenHeight()));
-        priceLabel.setFont(WindowUtils.getInfoDialogHeaderFont());
-        cancelButton.setFont(WindowUtils.getInfoDialogHeaderFont());
+        scrollPane.setBounds(new Rectangle(WindowConfig.getInfoDialogScreenWidth(),
+                WindowConfig.getInfoDialogScreenHeight()));
+        priceLabel.setFont(WindowConfig.getInfoDialogHeaderFont());
+        cancelButton.setFont(WindowConfig.getInfoDialogHeaderFont());
     }
 
     private void addData() {
@@ -77,6 +79,7 @@ public class OrderInfoDialog extends JDialog {
 
     private void setWindowPreferences() {
         setTitle("Order info");
+        setIconImage(ResourceLoader.getImage("icon/order-info.png"));
         setContentPane(mainPanel);
 //        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setResizable(false);
